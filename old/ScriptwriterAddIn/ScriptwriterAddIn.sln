@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptwriterAddIn", "ScriptwriterAddIn.csproj", "{368B59DA-5934-49C7-AB26-1190CA242722}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptwriterAddInWeb", "..\ScriptwriterAddInWeb\ScriptwriterAddInWeb.csproj", "{B9BB8F2D-4BBC-4291-8CE1-D38EFD0AD829}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{368B59DA-5934-49C7-AB26-1190CA242722}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{368B59DA-5934-49C7-AB26-1190CA242722}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368B59DA-5934-49C7-AB26-1190CA242722}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{368B59DA-5934-49C7-AB26-1190CA242722}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{368B59DA-5934-49C7-AB26-1190CA242722}.Release|Any CPU.Build.0 = Release|Any CPU
+		{368B59DA-5934-49C7-AB26-1190CA242722}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{B9BB8F2D-4BBC-4291-8CE1-D38EFD0AD829}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9BB8F2D-4BBC-4291-8CE1-D38EFD0AD829}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9BB8F2D-4BBC-4291-8CE1-D38EFD0AD829}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9BB8F2D-4BBC-4291-8CE1-D38EFD0AD829}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {083EFFAF-8BAB-41D5-A88B-03312A4049A1}
+	EndGlobalSection
+EndGlobal

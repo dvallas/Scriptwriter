@@ -1,0 +1,4 @@
+C:\Users\deanvallas\Source\repos\ScriptwriterAddIn\obj\Debug\ScriptwriterAddIn.csprojAssemblyReference.cache
+C:\Users\deanvallas\Source\repos\ScriptwriterAddIn\obj\Debug\ScriptwriterAddIn.csproj.CoreCompileInputs.cache
+C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptwriterAddIn\obj\Debug\ScriptwriterAddIn.csprojAssemblyReference.cache
+C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptwriterAddIn\obj\Debug\ScriptwriterAddIn.csproj.CoreCompileInputs.cache

@@ -1,0 +1,2 @@
+bin\Debug\OfficeAppManifests\ScriptWriterAddInManifest.xml
+C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddIn\bin\Debug\ScriptWriterAddIn.debugapp

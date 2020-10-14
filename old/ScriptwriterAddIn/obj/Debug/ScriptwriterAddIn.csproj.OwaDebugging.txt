@@ -1,0 +1,7 @@
+False
+222ed78b-dda8-47aa-9816-cf3615f6b5302dca4f01-3b9d-4417-95ed-5e9a83e299cc
+{64aeb043-aaad-4c08-831f-412f3758c685}{4f3e5ee5-76ec-44cf-830e-ff16f8119b46}
+{da15cd06-8572-4157-b7b5-d5ea114b1aaf}
+1.0.0.0
+ScriptwriterAddIn
+_layouts/15/
