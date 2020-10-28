@@ -96,6 +96,7 @@
         Word.run(function (context) {
             // Get the selection point and change the style to the current button's value
             context.document.getSelection().style = "Heading 1";
+            showNotification("", "Set to 'Slugline'");
             return context.sync();
         })
             .catch(errorHandler);
@@ -172,41 +173,26 @@
             // Get the current paragraph, adjust the Font and Paragraph attributes, and sync it back.  
             // Send a notification ot the Notification area.
 
-            //var p = context.document.getSelection().paragraphs.getFirstOrNullObject();
-            //p.load();
-
-            var px = context.document.body.paragraphs;
+            var px = context.document.getSelection().paragraphs;
             context.load(px, "items");
-            return context.sync()
-                .then(function () {
-                    var p = px.items[0];
-                    p.load("text");
-                    context.sync();
-                    var f = p.text.toUpperCase();
-                    p.text.replace(p.text, f);
-                    p.load("lineSpacing, leftIndent, spaceBefore, font/size, font/name, font/color");
-                    context.sync();
+            return context.sync().then(function () {
+                var p = px.items[0];
+                p.load("text, lineSpacing, leftIndent, spaceBefore, font/size, font/name, font/color");
+                    p.insertText(p.text.toUpperCase(), Word.InsertLocation.replace);
                     p.font.set({
                         name: "Courier",
                         size: 11,
                         color: "#000000",
                     })
-                })
-                .then(function () {
-                    var p = px.items[0];
-                    p.load("lineSpacing, leftIndent, spaceBefore, font/size, font/name, font/color");
-                    context.sync();
                     p.set({
                         lineSpacing: 12,
-                        leftIndent: 240,
+                        leftIndent: 180,
                         spaceBefore: 12,
                     });
-                })
-                .then(function () {
-                    showNotification("", "Set to 'Action'");
-                })
-                .then(context.sync())
-                .catch(errorHandler);
+                context.sync();
+                showNotification("", "Set to 'Character Name'");
+            }).catch(errorHandler);
+            word.app.acti
         });
     }
 
