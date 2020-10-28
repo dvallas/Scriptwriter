@@ -49,7 +49,43 @@
         .button3 {
             width: 100%;
         }
-    </style></head>
+        /* Style the tab */
+        .tab {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+            /* Style the buttons that are used to open the tab content */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 2px 16px;
+                transition: 0.3s;
+            }
+
+                /* Change background color of buttons on hover */
+                .tab button:hover {
+                    background-color: #ddd;
+                }
+
+                /* Create an active/current tablink class */
+                .tab button.active {
+                    background-color: #ccc;
+                }
+
+        /* Style the tab content */
+        .tabcontent {
+            display: none;
+            padding: 2px 6px;
+            border: 1px solid #ccc;
+            border-top: none;
+        }
+    </style>
+</head>
 
 <!-- Office UI Fabric JS and it's components are no longer actively supported. Please see https://aka.ms/PnP-OfficeFabricReact for recommended Patterns and Practices -->
 <!-- <link rel="stylesheet" href="https://appsforoffice.microsoft.com/fabric/2.1.0/fabric.components.min.css"> -->
@@ -57,71 +93,111 @@
 <body class="ms-Fabric" dir="ltr">
     <div id="content-main">
         <div class="padding">
-            <!--            <p class="ms-font-xxl ms-fontColor-neutralSecondary ms-fontWeight-semilight">Sample</p>
-    <br /><br />
-    <div class="ms-font-xl ms-fontColor-neutralTertiary">Select some text</div>
-    <div class="ms-font-m"><a target="_blank" class="ms-Link ms-Link--hero" href="https://go.microsoft.com/fwlink/?LinkId=276812">Find more samples online...</a></div>
-    <br /><br />
-    -->
-            <p class="ms-font-m-plus ms-fontColor-neutralTertiary" id="template-description"></p>
 
-            <table style="width:100%">
-                <tr>
-                    <td> <button id="btnSlugline" class="button button1">Slugline</button></td>
-                    <td><button id="btnAction" class="button button1">Action</button></td>
-                </tr>
-                <tr>
-                    <td><button id="btnName" class="button button1">Name</button></td>
-                    <td><button id="btnDirection" class="button button1">Direction</button></td>
-                </tr>
-                <tr>
-                    <td><button id="btnDialog" class="button button1">Dialog</button></td>
-                    <td><button id="btnCutTo" class="button button1">Cut To:</button></td>
-                </tr>
-                <tr>
-                    <td><button id="btnDissolveTo" class="button button1">Dissolve To:</button></td>
-                    <td><button id="btn2nd Slug" class="button button1">2nd Slug</button></td>
-                </tr>
-                <tr>
-                    <td><button id="btnNotes" class="button button1">Notes</button></td>
-                    <td><button id="btnParaphrase" class="button button1">Paraphrase</button></td>
-                </tr>
-                <tr>
-                    <td><button id="btnScene" class="button button1">Scene</button></td>
-                    <td><button id="btnSettings" class="button button1">Settings</button></td>
-                </tr>
-                <tr>
-                    <td><listbox id="listCharNames">Character Names</td>
-                </tr>
-            </table>
-            <!--<button class="Button Button--primary" id="highlight-button">
-                <span class="Button-icon"><i class="ms-Icon ms-Icon--plus"></i></span>
-                <span class="Button-label" id="button-text"></span>
-                <span class="Button-description" id="button-desc"></span>
-            </button>-->
+            <div class="tab" id="topTabs">
+                <button id="btnWrite" class="tablinks">Write</button>
+                <button id="btnAnalyze"class="tablinks">Analyze</button>
+            </div>
+
+            <!-- Tab content -->
+            <div id="Write" class="tabcontent">
+                <p class="ms-font-m-plus ms-fontColor-neutralTertiary" id="template-description"></p>
+
+                <table style="width: 100%">
+                    <tr>
+                        <td> <button id="btnSlugline" class="button button1">Slugline</button></td>
+                        <td><button id="btnAction" class="button button1">Action</button></td>
+                    </tr>
+                    <tr>
+                        <td><button id="btnName" class="button button1">Name</button></td>
+                        <td><button id="btnDirection" class="button button1">Direction</button></td>
+                    </tr>
+                    <tr>
+                        <td><button id="btnDialog" class="button button1">Dialog</button></td>
+                        <td><button id="btnCutTo" class="button button1">Cut To:</button></td>
+                    </tr>
+                    <tr>
+                        <td><button id="btnDissolveTo" class="button button1">Dissolve To:</button></td>
+                        <td><button id="btn2nd Slug" class="button button1">2nd Slug</button></td>
+                    </tr>
+                    <tr>
+                        <td><button id="btnNotes" class="button button1">Notes</button></td>
+                        <td><button id="btnParaphrase" class="button button1">Paraphrase</button></td>
+                    </tr>
+                    <tr>
+                        <td><button id="btnScene" class="button button1">Scene</button></td>
+                        <td><button id="btnSettings" class="button button1">Settings</button></td>
+                    </tr>
+                    <tr>
+                    </tr>
+                </table>
+                <!--<button class="Button Button--primary" id="highlight-button">
+            <span class="Button-icon"><i class="ms-Icon ms-Icon--plus"></i></span>
+            <span class="Button-label" id="button-text"></span>
+            <span class="Button-description" id="button-desc"></span>
+        </button>-->
+            </div>
+
+            <div id="Analyze" class="tabcontent">
+                <div class="tab">
+                    <table style="width: 100%">
+                        <tr>
+                            <td>
+                                <button class="tablinks" id="btnTabOne">Character Breakdown</button>
+                            </td>
+                            <td>
+                                <button class="tablinks" id="btnTabTwo">Character Map</button>
+                            </td>
+                            <td>
+                                <button class="tablinks" id="btnTabThree">Structure Map</button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="London" class="tabcontent">
+                <h3>London</h3>London is the capital city of England.
+            </div>
+
+            <div id="Paris" class="tabcontent">
+                <h3>Paris</h3>Paris is the capital of France.
+            </div>
+
+            <div id="Tokyo" class="tabcontent">
+                view character's flow through the story:
+                <button type="button" id="btnListCharNames">List Characters</button>
+                <div id="names">
+                    <select id="selectName" style="display:none"><option></option></select>
+                </div>
+            </div>
+            <div id="displayDiv" style="overflow:auto">
+            </div>
         </div>
-        </div>
-        <div class="footer">
-            <div class="ms-Grid ms-bgColor-themeSecondary">
-                <div class="ms-Grid-row">
-                    <div class="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12"> <div class="ms-font-xl ms-fontColor-white">Contoso</div></div>
+    </div>
+
+    <div class="footer">
+        <div class="ms-Grid ms-bgColor-themeSecondary">
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12">
+                    <div class="ms-font-xl ms-fontColor-white">Contoso</div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Component used for displaying notifications -->
-            <div class="MessageBanner" id="notification-popup">
-                <div class="MessageBanner-content">
-                    <div class="MessageBanner-text">
-                        <div class="MessageBanner-clipper">
-                            <div class="ms-font-m-plus ms-fontWeight-semibold" id="notification-header"></div>
-                            <div class="ms-font-m ms-fontWeight-semilight" id="notification-body"></div>
-                        </div>
-                    </div>
-                    <button class="MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
-                    <div class="MessageBanner-action"></div>
+    <!-- Component used for displaying notifications -->
+    <div class="MessageBanner" id="notification-popup">
+        <div class="MessageBanner-content">
+            <div class="MessageBanner-text">
+                <div class="MessageBanner-clipper">
+                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notification-header"></div>
+                    <div class="ms-font-m ms-fontWeight-semilight" id="notification-body"></div>
                 </div>
-                <button class="MessageBanner-close"> <i class="ms-Icon ms-Icon--ChromeClose"></i> </button>
             </div>
+            <button class="MessageBanner-expand" style="display: none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+            <div class="MessageBanner-action"></div>
+        </div>
+        <button class="MessageBanner-close"> <i class="ms-Icon ms-Icon--ChromeClose"></i> </button>
+    </div>
 </body>
 </html>

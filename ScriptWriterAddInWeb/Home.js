@@ -1,7 +1,6 @@
-﻿
-(function () {
-    "use strict";
+﻿"use strict";
 
+(function () {
     var messageBanner;
 
     // The initialize function must be run each time a new page is loaded.
@@ -17,18 +16,18 @@
                 $("#template-description").text("This sample displays the selected text.");
                 $('#button-text').text("Display!");
                 $('#button-desc').text("Display the selected text");
-
-                $('#highlight-button').click(displaySelectedText);
                 return;
             }
             //loadSampleData();
-            setTemplate();
+            //setTemplate();
             //setStyles();
             //setDataPreloads();
             //setMacros();
 
-            // Add a click event handler for the highlight button.
-            $('#highlight-button').click(hightlightLongestWord);
+            // #region Click Events;
+            // Add a click event handler for each button.
+            $('#btnListCharNames').click(btnListCharNames);
+            $('#selectName').change(selectNameChanged);
             $('#btnSlugline').click(btnSlugline);
             $('#btnAction').click(btnAction);
             $('#btnName').click(btnName);
@@ -41,9 +40,17 @@
             $('#btnParaphrase').click(btnParaphrase);
             $('#btnScene').click(btnScene);
             $('#btnSettings').click(btnSettings);
+            $('#btnWrite').click(openTab(event, 'Write'));
+            $('#btnAnalyze').mouseover(btnAnalyze_mouseover);
 
+            $('#btnTabOne').click(openTab(event, 'London'));
+            $('#btnTabTwo').click(openTab(event, 'Paris'));
+            $('#btnTabThree').click(openTab(event, 'Tokyo'));
+            //$('#btnTabThree').click(btnTabThree_click);
+
+            // #endregion
         });
-    };
+    }
 
     function setTemplate() {
         Word.run(function (context) {
@@ -90,7 +97,49 @@
             });
     }
 
+    function selectNameChanged() {
+        //$('#listCharNames').show();
+        //showNotification($('#selectName').val());
+        getScenesWIthCharacter($('#selectName').val(), function (sceneList) {
+            if (sceneList) {
+                ($("#displayDiv").html(sceneList));
+            }
+        });
+        ($('#selectName').hide());
+    }
+
+    //function loadCharacterNamesSelectDropdown(){
+    //var n=listCharacterNames();
+    //    var k=n.split(n, ",");
+    //    for (i=0;i<k.length;i++)
+    //        n="<option>" + k[i]+ "</option>";
+    //    ($("#selectName").append(n));
+
+    //}
+
     // #region Buttons;
+
+    function btnAnalyze_mouseover() {
+        //($('#topTabs').hide());
+        //($('#Write').hide());
+        //($('#Analyze').show());
+    }
+
+    function btnTabThree_click() {
+        ($('#btnListCharNames').show());
+        ($('#Analyze').hide());
+    }
+
+    function btnListCharNames() {
+        var nl;
+        listCharacterNames(function (nameList) {
+            nl = nameList;
+            ($('#selectName').html(nl));
+        });
+
+        ($('#selectName').show());
+        //($('#btnListCharNames').hide());
+    }
 
     function btnSlugline() {
         Word.run(function (context) {
@@ -140,33 +189,6 @@
             .catch(errorHandler);
     }
 
-    //function Capitalize(paragraph, doc) {
-    //    Word.run(function (context) {
-    //        // capitalize the character name
-    //        //doc = context.document;
-    //        //doc.load();
-    //        //context.sync();
-
-
-
-    //        //var originalRange = doc.getSelection();
-    //        //originalRange.load("text");
-    //        //context.sync();
-    //        //var t = originalRange.text.toUpperCase();
-    //        //doc.body.insertText(t, "Replace");
-    //        //originalRange.load("text");
-    //        originalRange = doc.getSelection();
-    //        originalRange.load("text");
-    //        context.sync();
-
-    //        var txt = originalRange.text;
-    //        doc.body.insertText(txt.toUpperCase(), "Replace");
-
-    //        return context.sync();
-    //    })
-    //        .catch(errorHandler);
-    //}
-
     function btnName() {
         Word.run(function (context) {
 
@@ -178,21 +200,20 @@
             return context.sync().then(function () {
                 var p = px.items[0];
                 p.load("text, lineSpacing, leftIndent, spaceBefore, font/size, font/name, font/color");
-                    p.insertText(p.text.toUpperCase(), Word.InsertLocation.replace);
-                    p.font.set({
-                        name: "Courier",
-                        size: 11,
-                        color: "#000000",
-                    })
-                    p.set({
-                        lineSpacing: 12,
-                        leftIndent: 180,
-                        spaceBefore: 12,
-                    });
+                p.insertText(p.text.toUpperCase(), Word.InsertLocation.replace);
+                p.font.set({
+                    name: "Courier",
+                    size: 11,
+                    color: "#000000",
+                })
+                p.set({
+                    lineSpacing: 12,
+                    leftIndent: 180,
+                    spaceBefore: 12,
+                });
                 context.sync();
                 showNotification("", "Set to 'Character Name'");
             }).catch(errorHandler);
-            word.app.acti
         });
     }
 
@@ -548,44 +569,14 @@
             .catch(errorHandler);
     }
 
-    function hightlightLongestWord() {
-        Word.run(function (context) {
-            // Queue a command to get the current selection and then
-            // create a proxy range object with the results.
-            var range = context.document.getSelection();
 
-            // This variable will keep the search results for the longest word.
-            var searchResults;
-
-            // Queue a command to load the range selection result.
-            context.load(range, 'text');
-
-            // Synchronize the document state by executing the queued commands
-            // and return a promise to indicate task completion.
-            return context.sync()
-                .then(function () {
-                    // Get the longest word from the selection.
-                    var words = range.text.split(/\s+/);
-                    var longestWord = words.reduce(function (word1, word2) { return word1.length > word2.length ? word1 : word2; });
-
-                    // Queue a search command.
-                    searchResults = range.search(longestWord, { matchCase: true, matchWholeWord: true });
-
-                    // Queue a commmand to load the font property of the results.
-                    context.load(searchResults, 'font');
-                })
-                .then(context.sync)
-                .then(function () {
-                    // Queue a command to highlight the search results.
-                    //searchResults.items[0].font.highlightColor = '#FFFF00'; // Yellow
-                    searchResults.items[0].font.bold = true;
-                })
-                .then(context.sync);
-        })
-            .catch(errorHandler);
-    }
 
     // #endregion
+
+    // #region Tabs
+
+    // #endregion
+
 
     function displaySelectedText() {
         Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
@@ -615,4 +606,130 @@
         messageBanner.showBanner();
         messageBanner.toggleExpansion();
     }
+
+    function listCharacterNames(callback) {
+        Word.run(function (context) {
+            var out = "";
+            var charNameList;
+            var paragraph;
+            var paras = context.document.body.paragraphs;
+            context.load(paras, 'text, style');
+            return context.sync()
+                .then(function () {
+                    for (let i = 0; i < paras.items.length; i++) {
+                        paragraph = paras.items[i];
+                        if (paragraph.style === "sCharacter Name" && paragraph.text.length > 0)
+                            charNameList += "," + paras.items[i].text.toUpperCase();
+                    }
+                    context.sync()
+                        .then(function () {
+                            out = sortByFrequency(charNameList.split(",").filter(Boolean));
+                            out.filter(name => name != 'undefined' && name != "");
+                            for (var k = 0; k < out.length; k++) {
+                                out[k] = "<option>" + out[k] + "</option>";
+                            }
+                           out.splice(0, 0, "<option><option>");
+                            callback(out);
+                        });
+                })
+                .catch(function (error) {
+                    showNotification('Error: ' + JSON.stringify(error));
+                    if (error instanceof OfficeExtension.Error) {
+                        console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+                    }
+                });
+        });
+    }
+
+    function getScenesWIthCharacter(nameToMap, callback) {
+        Word.run(function (context) {
+            var charSummaryMap = ['', ''];
+            var paragraph, summ, isInScene = false;
+            var paras = context.document.body.paragraphs;
+            context.load(paras, 'text, style');
+            return context.sync()
+                .then(function () {
+                    for (var i = 0; i < paras.items.length; i++) {
+                        paragraph = paras.items[i];
+                        //grab the Act, put it in the output
+                        if (paragraph.style === "Heading 1,Act Break")
+                            charSummaryMap.push('', paragraph.text);
+
+                        if (paragraph.style === "Heading 2,Summary") {
+                            summ = paragraph.text;
+                            i++
+                            paragraph = paras.items[i];
+                            //grabbed the scene summary, now check if the character is in that scene
+                            //if nameToMap is found in the scene, store the scene summary in output array
+                            while (i < paras.items.length && paragraph.style != "Heading 2,Summary") {
+                                paragraph = paras.items[i];
+                                if (paragraph.style === "Heading 1,Act Break") {
+                                    charSummaryMap.push('', paragraph.text);
+                                }
+                                if (paragraph.style === "sCharacter Name" && !isInScene) {
+                                    if (paragraph.text.trim().toUpperCase() === nameToMap.trim()) {
+                                        if (summ.trim().length > 0) {
+                                            charSummaryMap.push('', summ);
+                                            isInScene = true;
+                                        }
+                                    }
+                                }
+                                i++;
+                            }
+                            isInScene = false;
+                        }
+                    }
+                    callback(charSummaryMap.join("<br>"));
+                    charSummaryMap = ['', ''];
+                    context.sync();
+                })
+                .catch(function (error) {
+                    showNotification('Error: ' + JSON.stringify(error));
+                    if (error instanceof OfficeExtension.Error) {
+                        console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+                    }
+                });
+        })
+    }
+
+    function sortByFrequency(arr) {
+        let counter = arr.reduce(
+            (counter, key) => {
+                counter[key] = 1 + counter[key] || 1;
+                return counter
+            }, {});
+        //console.log(counter);
+        // {"apples": 1, "oranges": 4, "bananas": 2}
+
+        // sort counter by values (compare position 1 entries)
+        // the result is an array
+        let sorted_counter = Object.entries(counter).sort((a, b) => b[1] - a[1]);
+        //showNotification(sorted_counter);
+        // [["oranges", 4], ["bananas", 2], ["apples", 1]]
+
+        // show only keys of the sorted array
+        return (sorted_counter.map(x => x[0]));
+    }
+
+    function openTab(evt, cityName) {
+        // Declare all variables
+        var i, tabcontent, tablinks;
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        document.getElementById(cityName).style.display = "block";
+        //evt.currentTarget.className += " active";
+    }
+
 })();

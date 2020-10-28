@@ -1,0 +1,12 @@
+{
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript"
+    ],
+    "git.ignoreLimitWarning": true,
+    "workbench.colorTheme": "Visual Studio Light",
+    "workbench.preferredLightColorTheme": "Visual Studio Light",
+    "window.autoDetectColorScheme": true
+  }
+  

@@ -1,0 +1,2 @@
+bin\Debug\OfficeAppManifests\AdviserAddInManifest.xml
+C:\Users\deanvallas\Source\repos\Scriptwriter\AdviserAddIn\bin\Debug\AdviserAddIn.debugapp
