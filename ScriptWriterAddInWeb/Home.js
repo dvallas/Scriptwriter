@@ -48,8 +48,11 @@
             $('#btnAnalyze').click(btnAnalyze_click);
 
             $('#btnFlow').click(btnFlow_click);
-            $('#btnSides').click(btnSides_click);
+            $('#btnStructure').click(btnStructure_click);
             $('#btnMap').click(btnMap_click);
+            $('#btnFlow').mouseover(btnFlow_mouseover);
+            $('#btnStructure').mouseover(btnStructure_mouseover);
+            $('#btnMap').mouseover(btnMap_mouseover);
 
 
             // #endregion
@@ -468,6 +471,7 @@
     }
 
     function btnWrite_click() {
+        ($("#displayDiv").html(""));
         ($('#Analyze').hide());
         ($('#Write').show());
     }
@@ -483,7 +487,7 @@
         });
     }
 
-    function btnSides_click() {
+    function btnStructure_click() {
         ($("#displayDiv").html(""));
         showNotification("");
         getCharacterDialog($('#selectName').val(), function (sceneList) {
@@ -491,6 +495,18 @@
                 ($("#displayDiv").html(sceneList));
             }
         });
+    }
+
+    function btnStructure_mouseover() {
+        showNotification("View story structure as a whole");
+    }
+
+    function btnMap_mouseover() {
+        showNotification("Character Groupings, scene by scene");
+    }
+
+    function btnFlow_mouseover() {
+        showNotification("Character(s) in scenes as they flow through the story");
     }
 
     function btnMap_click() {
