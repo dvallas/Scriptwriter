@@ -2,7 +2,6 @@
 
 (function () {
     var messageBanner;
-
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
         $(document).ready(function () {
@@ -18,6 +17,9 @@
                 $('#button-desc').text("Display the selected text");
                 return;
             }
+            //Office.context.document.settings.set("Office.AutoShowTaskpaneWithDocument", true);
+            //Office.context.document.settings.saveAsync();
+
             //loadSampleData();
             //setTemplate();
             //setStyles();
@@ -39,65 +41,23 @@
             $('#btnNotes').click(btnNotes);
             $('#btnParaphrase').click(btnParaphrase);
             $('#btnScene').click(btnScene);
-            $('#btnSettings').click(btnSettings);
-            $('#btnWrite').click(openTab(event, 'Write'));
-            $('#btnAnalyze').mouseover(btnAnalyze_mouseover);
+            $('#btnNoteToDo').click(btnNoteToDo);
 
-            $('#btnTabOne').click(openTab(event, 'London'));
-            $('#btnTabTwo').click(openTab(event, 'Paris'));
-            $('#btnTabThree').click(openTab(event, 'Tokyo'));
-            //$('#btnTabThree').click(btnTabThree_click);
+            $('#btnUpToTop').click(btnUpToTop_click);
+            $('#btnWrite').click(btnWrite_click);
+            $('#btnAnalyze').click(btnAnalyze_click);
+
+            $('#btnFlow').click(btnFlow_click);
+            $('#btnSides').click(btnSides_click);
+            $('#btnMap').click(btnMap_click);
+
 
             // #endregion
         });
     }
 
-    function setTemplate() {
-        Word.run(function (context) {
-            var a = context.application.createDocument(this, "./MovieTemplate.txt", DocumentType.Base64);
-            //a.load();
-            //a.open();
-            context.sync();
-
-            // showNotification("", Word.DocumentProperties["template"]);
-            var b = Word.DocumentProperties(a);
-
-            //context.document.load(a);
-            //const newdoc1 = context.application.createDocument().open('./MovieTemplate.txt');
-            //var itworked = context.application.createDocument('./MovieTemplate.txt').load().open();
-            //context.document.load(newdoc);
-            //context.sync();
-            //newdoc.open();
-            //const tmpl = context.document.properties.template;
-
-            //Word.http.get('./MovieTemplate.txt').subscribe(response => {
-            //    Word.run(async context => {
-            //        const myNewDoc = context.application.createDocument(response);
-            //        context.load(myNewDoc);
-            //        await context.sync();
-            //        myNewDoc.open();
-            //        await context.sync();
-            //    });
-            return context.sync();
-        })
-            .catch(errorHandler);
-    };
-
-    function applyStyle(para, stylename) {
-        Word.run(function (context) {
-
-            para.style = stylename;
-            return context.sync();
-        })
-            .catch(function (error) {
-                console.log("Error: " + error);
-                if (error instanceof OfficeExtension.Error) {
-                    console.log("Debug info: " + JSON.stringify(error.debugInfo));
-                }
-            });
-    }
-
     function selectNameChanged() {
+        return;
         //$('#listCharNames').show();
         //showNotification($('#selectName').val());
         getScenesWIthCharacter($('#selectName').val(), function (sceneList) {
@@ -105,36 +65,13 @@
                 ($("#displayDiv").html(sceneList));
             }
         });
-        ($('#selectName').hide());
     }
 
-    //function loadCharacterNamesSelectDropdown(){
-    //var n=listCharacterNames();
-    //    var k=n.split(n, ",");
-    //    for (i=0;i<k.length;i++)
-    //        n="<option>" + k[i]+ "</option>";
-    //    ($("#selectName").append(n));
-
-    //}
-
-    // #region Buttons;
-
-    function btnAnalyze_mouseover() {
-        //($('#topTabs').hide());
-        //($('#Write').hide());
-        //($('#Analyze').show());
-    }
-
-    function btnTabThree_click() {
-        ($('#btnListCharNames').show());
-        ($('#Analyze').hide());
-    }
+    // #region Buttons
 
     function btnListCharNames() {
-        var nl;
         listCharacterNames(function (nameList) {
-            nl = nameList;
-            ($('#selectName').html(nl));
+            ($('#selectName').html(nameList));
         });
 
         ($('#selectName').show());
@@ -513,41 +450,116 @@
             .catch(errorHandler);
     }
 
-    function btnSettings() {
+    function btnNoteToDo() {
+        ($('#Analyze').hide());
+        ($('#Write').hide());
+        ($('#topTabs').show());
+    }
+
+    // #endregion
+
+    // #region Tabs
+
+    function btnUpToTop_click() {
+        ($('#Analyze').hide());
+        ($('#Write').hide());
+        ($('#Tokyo').hide());
+        ($('#topTabs').show());
+    }
+
+    function btnWrite_click() {
+        ($('#Analyze').hide());
+        ($('#Write').show());
+    }
+
+    function btnAnalyze_click() {
+        ($('#topTabs').hide());
+        ($('#Write').hide());
+        ($('#Analyze').show());
+        ($('#Tokyo').show());
+        $('#selectName').focus();
+        listCharacterNames(function (nameList) {
+            ($('#selectName').html(nameList));
+        });
+    }
+
+    function btnSides_click() {
+        ($("#displayDiv").html(""));
+        showNotification("");
+        getCharacterDialog($('#selectName').val(), function (sceneList) {
+            if (sceneList) {
+                ($("#displayDiv").html(sceneList));
+            }
+        });
+    }
+
+    function btnMap_click() {
+        ($("#displayDiv").html(""));
+        showNotification("");
+        //getScenesWIthCharacter($('#selectName').val(), function (sceneList) {
+        //    if (sceneList) {
+        //        ($("#displayDiv").html(sceneList));
+        //    }
+        //});
+    }
+
+    function btnFlow_click() {
+        ($("#displayDiv").html(""));
+        //showNotification("");
+        getScenesWIthCharacter($('#selectName').val(), function (sceneList) {
+            if (sceneList) {
+                ($("#displayDiv").html(sceneList));
+            }
+        });
+    }
+
+    // #endregion
+
+    // #region Helpers
+
+    function setTemplate() {
         Word.run(function (context) {
-            // Queue a command to get the current selection and then
-            // create a proxy range object with the results.
-            var range = context.document.getSelection();
+            var a = context.application.createDocument(this, "./MovieTemplate.txt", DocumentType.Base64);
+            //a.load();
+            //a.open();
+            context.sync();
 
-            // This variable will keep the search results for the longest word.
-            var searchResults;
+            // showNotification("", Word.DocumentProperties["template"]);
+            var b = Word.DocumentProperties(a);
 
-            // Queue a command to load the range selection result.
-            context.load(range, 'text');
+            //context.document.load(a);
+            //const newdoc1 = context.application.createDocument().open('./MovieTemplate.txt');
+            //var itworked = context.application.createDocument('./MovieTemplate.txt').load().open();
+            //context.document.load(newdoc);
+            //context.sync();
+            //newdoc.open();
+            //const tmpl = context.document.properties.template;
 
-            // Synchronize the document state by executing the queued commands
-            // and return a promise to indicate task completion.
-            return context.sync()
-                .then(function () {
-                    // Get the longest word from the selection.
-                    var words = range.text.split(/\s+/);
-                    var longestWord = words.reduce(function (word1, word2) { return word1.length > word2.length ? word1 : word2; });
-
-                    // Queue a search command.
-                    searchResults = range.search(longestWord, { matchCase: true, matchWholeWord: true });
-
-                    // Queue a commmand to load the font property of the results.
-                    context.load(searchResults, 'font');
-                })
-                .then(context.sync)
-                .then(function () {
-                    // Queue a command to highlight the search results.
-                    searchResults.items[0].font.highlightColor = '#FFFF00'; // Yellow
-                    searchResults.items[0].font.bold = true;
-                })
-                .then(context.sync);
+            //Word.http.get('./MovieTemplate.txt').subscribe(response => {
+            //    Word.run(async context => {
+            //        const myNewDoc = context.application.createDocument(response);
+            //        context.load(myNewDoc);
+            //        await context.sync();
+            //        myNewDoc.open();
+            //        await context.sync();
+            //    });
+            return context.sync();
         })
             .catch(errorHandler);
+    };
+
+    function applyStyle(para, stylename) {
+        Word.run(function (context) {
+
+            para.style = stylename;
+            return context.sync();
+        })
+            .catch(function (error) {
+                console.log("Error: " + error);
+                if (error instanceof OfficeExtension.Error) {
+                    console.log("Debug info: " + JSON.stringify(error.debugInfo));
+                }
+            });
     }
 
     function loadSampleData() {
@@ -568,15 +580,6 @@
         })
             .catch(errorHandler);
     }
-
-
-
-    // #endregion
-
-    // #region Tabs
-
-    // #endregion
-
 
     function displaySelectedText() {
         Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
@@ -607,6 +610,18 @@
         messageBanner.toggleExpansion();
     }
 
+    function arrayContainsArray(superset, subset) {
+        if (0 === subset.length) {
+            return false;
+        }
+        return subset.every(function (value) {
+            return (superset.indexOf(value) >= 0);
+        });
+    }
+
+
+    // #endregion
+
     function listCharacterNames(callback) {
         Word.run(function (context) {
             var out = "";
@@ -628,7 +643,8 @@
                             for (var k = 0; k < out.length; k++) {
                                 out[k] = "<option>" + out[k] + "</option>";
                             }
-                           out.splice(0, 0, "<option><option>");
+                            //delete out[0];
+                            //out.splice(0, 0, "<option><option>");
                             callback(out);
                         });
                 })
@@ -641,7 +657,52 @@
         });
     }
 
-    function getScenesWIthCharacter(nameToMap, callback) {
+    function getScenesWIthCharacter(namesToFind, callback) {
+        Word.run(function (context) {
+            //var charSummaryMap = ['<image src="~../../images/paragraph.jpg"> ', ''];
+            var paragraph;
+            var summ;
+            var charsFoundInScene = [];
+            var paras = context.document.body.paragraphs;
+            context.load(paras, 'text, style');
+            return context.sync()
+                .then(function () {
+                    var charSummaryMap = [];
+                    for (var i = 0; i < paras.items.length; i++) {
+                        paragraph = paras.items[i];
+                        if (paragraph.style === "Heading 1,Act Break")
+                            charSummaryMap.push("<b>" + paragraph.text + "</b><br />" + "<hr />");
+                        if (paragraph.style === "Heading 2,Summary") {
+                            summ = paragraph.text + "<br />";
+                            let j = ++i;
+                            paragraph = paras.items[j];
+                            while (j < paras.items.length && paragraph.style != "Heading 2,Summary") {
+                                paragraph = paras.items[j];
+                                if (paragraph.style === "sCharacter Name"
+                                    && namesToFind.includes(paragraph.text.toUpperCase())) {
+                                    charsFoundInScene.push(paragraph.text.toUpperCase());
+                                }
+                                j++;
+                            }
+                            if (arrayContainsArray(namesToFind, charsFoundInScene) && !charSummaryMap.includes(summ)) {
+                                charSummaryMap.push(summ);
+                                charsFoundInScene = [];
+                            }
+                        }
+                    } // end for
+                    callback(charSummaryMap.join("<br>"));
+                    context.sync();
+                })
+        })
+            .catch(function (error) {
+                showNotification('Error: ' + JSON.stringify(error));
+                if (error instanceof OfficeExtension.Error) {
+                    console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+                }
+            })
+    }
+
+    function getCharacterDialog(nameToMap, callback) {
         Word.run(function (context) {
             var charSummaryMap = ['', ''];
             var paragraph, summ, isInScene = false;
@@ -653,7 +714,7 @@
                         paragraph = paras.items[i];
                         //grab the Act, put it in the output
                         if (paragraph.style === "Heading 1,Act Break")
-                            charSummaryMap.push('', paragraph.text);
+                            charSummaryMap.push("<b>" + paragraph.text + "</b>");
 
                         if (paragraph.style === "Heading 2,Summary") {
                             summ = paragraph.text;
@@ -664,7 +725,7 @@
                             while (i < paras.items.length && paragraph.style != "Heading 2,Summary") {
                                 paragraph = paras.items[i];
                                 if (paragraph.style === "Heading 1,Act Break") {
-                                    charSummaryMap.push('', paragraph.text);
+                                    charSummaryMap.push("<b>" + paragraph.text + "</b>");
                                 }
                                 if (paragraph.style === "sCharacter Name" && !isInScene) {
                                     if (paragraph.text.trim().toUpperCase() === nameToMap.trim()) {
@@ -728,7 +789,7 @@
         }
 
         // Show the current tab, and add an "active" class to the button that opened the tab
-        document.getElementById(cityName).style.display = "block";
+        //document.getElementById(cityName).style.display = "block";
         //evt.currentTarget.className += " active";
     }
 

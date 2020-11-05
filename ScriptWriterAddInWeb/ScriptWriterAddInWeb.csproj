@@ -70,12 +70,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Analyze.js" />
     <Content Include="Content\Button.css" />
     <Content Include="Content\fabric-9.6.0.scoped.css" />
     <Content Include="Content\fabric-9.6.0.scoped.min.css" />
     <Content Include="Content\fabric.css" />
     <Content Include="Content\fabric.min.css" />
+    <Content Include="Content\MenuButtonsAndTabs.css" />
     <Content Include="Content\MessageBanner.css" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />

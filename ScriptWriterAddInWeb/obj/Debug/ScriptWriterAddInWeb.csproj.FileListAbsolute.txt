@@ -52,8 +52,8 @@ C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\bin\roslyn\VB
 C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\bin\roslyn\VBCSCompiler.exe.config
 C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
 C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\obj\Debug\ScriptWriterAddInWeb.csprojAssemblyReference.cache
 C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\obj\Debug\ScriptWriterAddInWeb.csproj.CoreCompileInputs.cache
 C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\obj\Debug\ScriptWriterAddInWeb.csproj.CopyComplete
 C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\obj\Debug\ScriptWriterAddInWeb.dll
 C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\obj\Debug\ScriptWriterAddInWeb.pdb
+C:\Users\deanvallas\Source\repos\Scriptwriter\ScriptWriterAddInWeb\obj\Debug\ScriptWriterAddInWeb.csprojAssemblyReference.cache

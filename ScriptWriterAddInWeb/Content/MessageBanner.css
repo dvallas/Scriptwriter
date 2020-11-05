@@ -7,7 +7,7 @@
 .MessageBanner {
     color: #333333;
     font-family: 'Segoe UI Regular WestEuropean', 'Segoe UI', Tahoma, Arial, sans-serif;
-    font-size: 12px;
+    font-size: 9px;
     font-weight: normal;
     position: relative;
     border-bottom: 1px solid #767676;
@@ -24,7 +24,7 @@
 }
 
 .MessageBanner .ms-Icon {
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .MessageBanner.hide {
@@ -54,7 +54,7 @@
 .MessageBanner-close {
     position: absolute;
     right: 0;
-    top: 0;
+    bottom:0;
     line-height: 52px;
     color: #666666;
 }
@@ -70,7 +70,7 @@
 
 .MessageBanner-expand {
     display: none;
-    vertical-align: top;
+    vertical-align: bottom;
 }
 
 .MessageBanner-expand.is-visible {
@@ -79,8 +79,8 @@
 
 .MessageBanner-action {
     display: inline-block;
-    vertical-align: top;
-    margin-top: 10px;
+    vertical-align: bottom;
+    margin-bottom: 10px;
     margin-left: 10px;
     padding-right: 36px;
 }
@@ -94,11 +94,11 @@
     white-space: nowrap;
     text-overflow: ellipsis;
     display: inline-block;
-    vertical-align: top;
+    vertical-align: bottom;
 }
 
 .MessageBanner.is-expanded {
-    height: auto;
+    height:auto;
 }
 
 .MessageBanner.is-expanded .MessageBanner-clipper {
