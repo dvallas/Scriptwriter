@@ -5,7 +5,7 @@ html {
     min-height: 100%;
 }
 body {
-    margin: 0 0 40px; /* bottom = footer height */
+    /* margin: 0  0 40px; bottom = footer height */
 }
 .footer {
     position: absolute;
@@ -14,9 +14,23 @@ body {
     height: 40px;
     width: 100%;
 }
+.header {
+    position: absolute;
+    left: 0;
+    top: 0px;
+    height: 40px;
+    width: 100%;
+}
 
+.bottomMessageBanner {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+}
 .padding {
-    padding: 15px;
+    padding: 5px;
 }
 
 #notification-popup.MessageBanner {
