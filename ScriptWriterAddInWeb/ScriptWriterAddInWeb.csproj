@@ -77,6 +77,8 @@
     <Content Include="Content\fabric.min.css" />
     <Content Include="Content\MenuButtonsAndTabs.css" />
     <Content Include="Content\MessageBanner.css" />
+    <Content Include="Content\tabmenu.css" />
+    <Content Include="Content\TopNav.css" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
     <Content Include="Home.css" />
@@ -564,6 +566,10 @@
     <Content Include="Scripts\Office\metadata\endpoints.xml" />
     <Content Include="Scripts\Office\metadata\features.xml" />
     <Content Include="Scripts\Office\MicrosoftAjax.js" />
+    <Content Include="test.html" />
+    <Content Include="TestHTML\tabmenu.css" />
+    <Content Include="TestHTML\tabmenu.html" />
+    <Content Include="TestHTML\tabmenu.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -571,6 +577,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="TestHTML\debug.log" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

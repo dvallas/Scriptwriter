@@ -2,13 +2,14 @@
 
 (function () {
     var messageBanner;
+    var whichReport;
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
         $(document).ready(function () {
             // Initialize the notification mechanism and hide it
-            //var element = document.querySelector('.MessageBanner');
-            //messageBanner = new components.MessageBanner(element);
-            //messageBanner.hideBanner();
+            var element = document.querySelector('.MessageBanner');
+            messageBanner = new components.MessageBanner(element);
+            messageBanner.hideBanner();
 
             // If not using Word 2016, use fallback logic.
             if (!Office.context.requirements.isSetSupported('WordApi', '1.1')) {
@@ -27,9 +28,10 @@
             //setMacros();
 
             // #region Click Events;
-            // Add a click event handler for each button.
+            // Add event handlers for each button.
             $('#btnListCharNames').click(btnListCharNames);
-            $('#selectName').change(selectNameChanged);
+            //$('#selectName').change(selectNameChanged);
+            $('#selectName').blur(selectNameChanged);
             $('#btnSlugline').click(btnSlugline);
             $('#btnAction').click(btnAction);
             $('#btnName').click(btnName);
@@ -45,29 +47,62 @@
 
             $('#btnUpToTop').click(btnUpToTop_click);
             $('#btnWrite').click(btnWrite_click);
-            $('#btnAnalyze').click(btnAnalyze_click);
+            $('#dropDownAnalyze').click(dropDownAnalyze_click);
 
-            $('#btnFlow').click(btnFlow_click);
+            $('#btnDialogReport').mouseover(btnDialogReport_mouseover);
             $('#btnDialogReport').click(btnDialogReport_click);
             $('#btnGroupings').click(btnGroupings_click);
-            $('#btnFlow').mouseover(btnFlow_mouseover);
-            $('#btnDialogReport').mouseover(btnDialogReport_mouseover);
             $('#btnGroupings').mouseover(btnGroupings_mouseover);
+            $('#btnFlow').mouseover(btnFlow_mouseover);
+            $('#btnFlow').click(btnFlow_click);
 
+            $('#btnHome').click(btnHome_click);
+            $('#dropDownAnalyze').mouseover(dropDownAnalyze_mouseover);
+            $('#dropDownAnalyze').mouseout(dropDownAnalyze_mouseout);
+
+            //$('#hamburger').mouseover(MenuActiveToggle("hamburger"));
+            //$('#hamburger').click(hamburger_click);
+
+            ($('#TopNav').show());
+            //($('#divTopMessage').text("this is display text"));
 
             // #endregion
         });
     }
 
     function selectNameChanged() {
-        return;
-        //$('#listCharNames').show();
-        //showNotification($('#selectName').val());
-        getScenesWIthCharacter($('#selectName').val(), function (sceneList) {
-            if (sceneList) {
-                ($("#displayDiv").html(sceneList));
-            }
-        });
+        ($("#Tokyo").hide());
+        ($("#divTopMessage").html($('#selectName').val().join(" + ")));
+        ($("#Tokyo").hide());
+
+        if (whichReport && whichReport === "flow") {
+            getScenesByCharacter($('#selectName').val(), function (sceneList) {
+                if (sceneList) {
+                    ($("#displayDiv").html(sceneList));
+                }
+            });
+        } else if (whichReport === "groupings") {
+            getCharactersInScenes($('#selectName').val(), function (sceneList) {
+                let output = "";
+                let names = "";
+                let summary = "";
+                for (let i = 1; i < sceneList.length; i++) {
+                    summary = sceneList[0, i];
+                    names = sceneList[1, i];
+                    output += summary + "<br />" + names + "<br /><hr /><br />";
+                    i++
+                }
+                if (sceneList) {
+                    ($("#displayDiv").html(output));
+                }
+            });
+        } else if (whichReport === "dialog") {
+            getCharacterDialog($('#selectName').val(), function (dialogList) {
+                if (dialogList) {
+                    ($("#displayDiv").html(dialogList));
+                }
+            });
+        }
     }
 
     // #region Buttons
@@ -465,94 +500,106 @@
 
     function btnUpToTop_click() {
         ($("#divHeaderMessage").hide());
-       ($("#displayDiv").html(""));
+        ($("#displayDiv").html(""));
         ($('#Analyze').hide());
         ($('#Write').hide());
         ($('#Tokyo').hide());
-        ($('#topTabs').show());
+        ($('#TopNav').show());
     }
 
     function btnWrite_click() {
+        MenuActiveToggle("btnWrite");
         ($("#displayDiv").html(""));
         ($('#Analyze').hide());
         ($('#Write').show());
     }
 
-    function btnAnalyze_click() {
-       ($("#divHeaderMessage").html("Analysis Tools"));
-        ($("#divHeaderMessage").show());
-       ($('#topTabs').hide());
-        ($('#Write').hide());
-        ($('#Analyze').show());
-        ($('#Tokyo').show());
-        $('#selectName').focus();
-        listCharacterNames(function (nameList) {
-            ($('#selectName').html(nameList));
-        });
+    function dropDownAnalyze_mouseover() {
+        //($("#displayDiv").html(""));
+        //($('#Analyze').hide());
+        ($('#analyzeMenu').show());
+    }
+
+    function dropDownAnalyze_mouseout() {
+        //($("#displayDiv").html(""));
+        //($('#Analyze').hide());
+        ($('#analyzeMenu').hide());
+    }
+
+    function dropDownAnalyze_click() {
+        //($("#divHeaderMessage").html("Analysis Tools"));
+        //($("#divHeaderMessage").show());
+        //($('#TopNav').hide());
+        //($('#Write').hide());
     }
 
     function btnDialogReport_click() {
         ($("#divUserMessage").html("All of character(s) speeches grouped together"));
         ($("#displayDiv").html(""));
-        //showNotification("");
-        getCharacterDialog($('#selectName').val(), function (sceneList) {
-            if (sceneList) {
-                ($("#displayDiv").html(sceneList));
-            }
+        whichReport = "dialog";
+        listCharacterNames(function (nameList) {
+            ($('#selectName').html(nameList));
         });
+        ($('#Tokyo').show());
+        $('#selectName').focus();
     }
 
     function btnDialogReport_mouseover() {
         //showNotification("View story structure as a whole");
         ($("#divUserMessage").html("All of character(s) speeches grouped together"));
-   }
+    }
 
     function btnGroupings_mouseover() {
-        ($("#divUserMessage").html("Groupings of selected characters throughout the story"));
+        //($("#divUserMessage").html("Groupings of selected characters throughout the story"));
     }
 
     function btnGroupings_click() {
-       ($("#divUserMessage").html("Groupings of selected characters throughout the story"));
-       ($("#displayDiv").html(""));
-        //showNotification("");
+        ($("#divUserMessage").html("Groupings of selected characters throughout the story"));
+        ($("#displayDiv").html(""));
+        whichReport = "groupings";
+        listCharacterNames(function (nameList) {
+            ($('#selectName').html(nameList));
+        });
+        ($('#Tokyo').show());
+        $('#selectName').focus();
 
-        getCharactersInScenes($('#selectName').val(), function (sceneList) {
-            var output;
 
-            for (let i = 0; i < sceneList.length; i++) {
-                if (Array.isArray(sceneList[i])) {
-                    sceneList[i] = sceneList[i].join(", ");
-
-                }
-                if (Array.isArray(sceneList[i + 1])) {
-                    sceneList[i + 1] = sceneList[i + 1].join(", ");
-                }
-                output +=  sceneList[i + i] + "<br />" + sceneList[i];
-                i++
-            }
-            if (sceneList) {
-                ($("#displayDiv").html(output));
-            }
-        })
     }
 
     function btnFlow_mouseover() {
         //showNotification("Character(s) in scenes as they flow through the story");
         //ms - font - s ms - fontColor - white
-        
-            ($("#divUserMessage").html("Character(s) in scenes as they flow through the story"));
+        //listCharacterNames(function (nameList) {
+        //    ($('#selectName').html(nameList));
+        //});
+
+        //($("#Tokyo").show());
+        //($('#selectName').show());
+
 
     }
 
     function btnFlow_click() {
         ($("#divUserMessage").html("Character(s) in scenes as they flow through the story"));
-       ($("#displayDiv").html(""));
-        //showNotification("");
-        getScenesByCharacter($('#selectName').val(), function (sceneList) {
-            if (sceneList) {
-                ($("#displayDiv").html(sceneList));
-            }
+        ($("#displayDiv").html(""));
+        whichReport = "flow";
+        listCharacterNames(function (nameList) {
+            ($('#selectName').html(nameList));
         });
+        ($('#Tokyo').show());
+        $('#selectName').focus();
+    }
+
+    function btnHome_click() {
+        MenuActiveToggle("btnHome");
+        ($("#divUserMessage").text("Written By"));
+        ($("#divTopMessage").text(""));
+        ($("#displayDiv").hide());
+        ($('#Write').hide());
+        ($('#Tokyo').hide());
+
+        //($("#divTopMessage").text("hello"));
+
     }
 
     // #endregion
@@ -646,8 +693,8 @@
 
     // Helper function for displaying notifications
     function showNotification(header, content) {
-        $("#notification-header").text(header);
         $("#notification-body").text(content);
+        $("#notification-header").text(header);
         messageBanner.showBanner();
         messageBanner.toggleExpansion();
     }
@@ -661,8 +708,48 @@
         });
     }
 
+    function sortByFrequency(arr) {
+        let counter = arr.reduce(
+            (counter, key) => {
+                counter[key] = 1 + counter[key] || 1;
+                return counter
+            }, {});
+        //console.log(counter);
+        // {"apples": 1, "oranges": 4, "bananas": 2}
+
+        // sort counter by values (compare position 1 entries)
+        // the result is an array
+        let sorted_counter = Object.entries(counter).sort((a, b) => b[1] - a[1]);
+        //showNotification(sorted_counter);
+        // [["oranges", 4], ["bananas", 2], ["apples", 1]]
+
+        // show only keys of the sorted array
+        return (sorted_counter.map(x => x[0]));
+    }
+
+    function MenuActiveToggle(element) {
+        var x = document.getElementById(element);
+        if (x.style.class === "") {
+            x.style.class = "Active";
+        } else {
+            x.style.class = "";
+        }
+    }
+
+    /* Toggle between adding and removing the "responsive" class to topnav when the user clicks on the icon */
+    function hamburger_click() {
+        var x = document.getElementById("hamburger");
+        if (x.className === "topnav") {
+            x.className += " responsive";
+        } else {
+            x.className = "topnav";
+        }
+    }
+
 
     // #endregion
+
+    // #region Logic
 
     function listCharacterNames(callback) {
         Word.run(function (context) {
@@ -701,7 +788,6 @@
 
     function getScenesByCharacter(namesToFind, callback) {
         Word.run(function (context) {
-            //var charSummaryMap = ['<image src="~../../images/paragraph.jpg"> ', ''];
             var paragraph;
             var summ;
             var charsFoundInScene = [];
@@ -748,41 +834,46 @@
         Word.run(function (context) {
             // Show all the characters grouped together, for every scene
             var paragraph;
-            var summ;
             var paras = context.document.body.paragraphs;
             context.load(paras, 'text, style');
             return context.sync()
                 .then(function () {
                     var summ;
-                    var charSummaryMap = [];
+                    var charSummaryMap = [,]
                     var charsFoundInScene = [];
                     for (var i = 0; i < paras.items.length; i++) {
                         paragraph = paras.items[i];
                         if (paragraph.style === "Heading 1,Act Break" && paragraph.text != undefined)
-                            charSummaryMap.push("<b>" + paragraph.text + "</b><br />" + "<hr />");
-                        if (paragraph.style === "Heading 2,Summary"
-                            && paragraph.text != undefined
-                            && !charSummaryMap.includes(paragraph.text)) {
+                            charSummaryMap.push(["<b>" + paragraph.text + "</b><br /><hr />"]);
+                        if (paragraph.style === "Heading 2,Summary") {
                             summ = paragraph.text + "<br />";
                             i++;
                             paragraph = paras.items[i];
                             let j = i;
+
+                            // get the list of names in the scene, if one is on the search list
                             while (j < paras.items.length && paragraph.style != "Heading 2,Summary") {
                                 if (paragraph.style === "sCharacter Name"
-                                    && paragraph.text != undefined
-                                    && !charsFoundInScene.includes(paragraph.text.toUpperCase())) {
+                                   // && namesToFind.includes(paragraph.text) 
+                                    && paragraph.text.split(",").some(r => namesToFind.includes(r)
+                                    && !charsFoundInScene.includes(paragraph.text.toUpperCase())
+                                )) {
                                     charsFoundInScene.push(paragraph.text.toUpperCase());
                                 }
+                                //check the rest of the names in this scene
                                 j++;
                                 paragraph = paras.items[j];
                             } // end while
-                            charSummaryMap.push(charsFoundInScene ? charsFoundInScene : "");
-                            charSummaryMap.push(summ);
-
+                            i = j;
+                            //push the scene summary and list of names to the collector array
+                            if (charsFoundInScene.length > 0) {
+                                charSummaryMap.push([summ, charsFoundInScene]);
+                            }
+                            summ = "";
                             charsFoundInScene = [];
-                            i++;
-                            paragraph = paras.items[i];
-                        }
+                            //i++;
+                            //paragraph = paras.items[i];
+                       }
                     } // end for
 
                     callback(charSummaryMap);
@@ -799,8 +890,8 @@
 
     function getCharacterDialog(nameToMap, callback) {
         Word.run(function (context) {
-            var charSummaryMap = ['', ''];
-            var paragraph, summ, isInScene = false;
+            var charDialogList = [];
+            var paragraph, charName;
             var paras = context.document.body.paragraphs;
             context.load(paras, 'text, style');
             return context.sync()
@@ -808,38 +899,35 @@
                     for (var i = 0; i < paras.items.length; i++) {
                         paragraph = paras.items[i];
                         //grab the Act, put it in the output
-                        if (paragraph.style === "Heading 1,Act Break")
-                            charSummaryMap.push("<b>" + paragraph.text + "</b>");
-
-                        if (paragraph.style === "Heading 2,Summary") {
-                            summ = paragraph.text;
-                            i++
-                            paragraph = paras.items[i];
-                            //grabbed the scene summary, now check if the character is in that scene
-                            //if nameToMap is found in the scene, store the scene summary in output array
-                            while (i < paras.items.length && paragraph.style != "Heading 2,Summary") {
-                                paragraph = paras.items[i];
-                                if (paragraph.style === "Heading 1,Act Break") {
-                                    charSummaryMap.push("<b>" + paragraph.text + "</b>");
-                                }
-                                if (paragraph.style === "sCharacter Name" && !isInScene) {
-                                    if (paragraph.text.trim().toUpperCase() === nameToMap.trim()) {
-                                        if (summ.trim().length > 0) {
-                                            charSummaryMap.push('', summ);
-                                            isInScene = true;
-                                        }
+                        if (paragraph.style === "Heading 1,Act Break") {
+                            charDialogList.push("<br /><b>" + paragraph.text + "</b><br />");
+                        }
+                        // grab selected characters' dialog per scene (demarcated by sSlugline)
+                        if (paragraph.style === "sCharacter Name" && nameToMap.includes(paragraph.text.toUpperCase())) {
+                            while (i < paras.items.length && paragraph.style != "sSlugline") {
+                                if (paragraph.style === "sCharacter Name" && nameToMap.includes(paragraph.text.toUpperCase())) {
+                                    charName = paragraph.text;
+                                    if (i < paras.items.length) {
+                                        i++;
+                                        paragraph = paras.items[i];
+                                    }
+                                    if (paragraph.style === "sDialog") {
+                                        charDialogList.push(charName.toUpperCase() + "<br >" + paragraph.text + "<br /><br />");
                                     }
                                 }
-                                i++;
+                                if (i < paras.items.length) {
+                                    i++;
+                                    paragraph = paras.items[i];
+                                }
                             }
-                            isInScene = false;
                         }
                     }
-                    callback(charSummaryMap.join("<br>"));
-                    charSummaryMap = ['', ''];
+                    callback(charDialogList);
+                    charDialogList = [];
                     context.sync();
                 })
                 .catch(function (error) {
+                    //showNotification('Error: ' + error.content.join(", "));
                     showNotification('Error: ' + JSON.stringify(error));
                     if (error instanceof OfficeExtension.Error) {
                         console.log('Debug info: ' + JSON.stringify(error.debugInfo));
@@ -848,23 +936,6 @@
         })
     }
 
-    function sortByFrequency(arr) {
-        let counter = arr.reduce(
-            (counter, key) => {
-                counter[key] = 1 + counter[key] || 1;
-                return counter
-            }, {});
-        //console.log(counter);
-        // {"apples": 1, "oranges": 4, "bananas": 2}
-
-        // sort counter by values (compare position 1 entries)
-        // the result is an array
-        let sorted_counter = Object.entries(counter).sort((a, b) => b[1] - a[1]);
-        //showNotification(sorted_counter);
-        // [["oranges", 4], ["bananas", 2], ["apples", 1]]
-
-        // show only keys of the sorted array
-        return (sorted_counter.map(x => x[0]));
-    }
+    // #endregion
 
 })();
