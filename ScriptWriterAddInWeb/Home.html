@@ -28,7 +28,7 @@
 </head>
 
 
-<body class="ms-Fabric" dir="ltr">
+<body class="ms-Fabric" dir="ltr" style="height:100%;">
 
     <div id="content-main">
         <div class="header">
@@ -40,7 +40,7 @@
                         Analyze
                         <i class="fa fa-caret-down"></i>
                     </button>
-                    <div class="dropdown-content">
+                    <div id="dropDownMenu" class="dropdown-content">
                         <a id="btnDialogReport" href="#">Character Voice</a>
                         <a id="btnGroupings" href="#">Character Groupings in Scenes</a>
                         <a id="btnFlow" href="#">Character Flow through Story</a>
@@ -48,11 +48,23 @@
                 </div>
                 <a id="btnHome" href="#">BlockBuster</a>
             </div>
-        </div>
+            <div id="divTopMessage"></div>
 
-        <div id="divTopMessage"></div>
+            <div id="Tokyo" class="tabcontent" style="vertical-align:middle; text-align:center;">
+                <table style="width:100%; border:none">
+                    <tr>
+                        <td>
+                            <select multiple size=12 id="selectName"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="btnRunReport">Run Report</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-        <div class="padding">
 
             <div id="Write" class="tabcontent" style="display:none">
                 <p class="ms-font-m-plus ms-fontColor-neutralTertiary" id="template-description">
@@ -85,44 +97,12 @@
                     </table>
                 </p>
             </div>
+            <div id="displayDiv" class="wrap" style="overflow:scroll; line-height:1.5em; "></div>
+        </div>
+        <div class="padding">
 
-            <div id="Tokyo" class="tabcontent" style="vertical-align:top; text-align:center;display:none">
-                <table style="width:100%; border:none">
-                    <tr>
-                        <td>
-                            <select multiple id="selectName"></select>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-
-            <div id="Analyze" class="tabcontent;" style="border:none; display:none">
-                <div class="tab">
-                    <table style="width: 100%;border:none">
-                        <tr>
-                            <td>
-                                <!--<input type="image" class="ms-Icon ms-Icon--plus" style="vertical-align:middle" id="btnUpToTop" src="~../../Images/upArrow.jpg" />-->
-                                <button class="MessageBanner-expand" id="btnUpToTop" style="display: none">
-                                    <i class="ms-Icon ms-Icon--chevronsUp"></i>
-                                </button>
-                            </td>
-                            <td>
-                                <button class="tablinks" id="btnDialogReport">Dialog</button>
-                            </td>
-                            <td>
-                                <button class="tablinks" id="btnGroupings">Groupings</button>
-                            </td>
-                            <td>
-                                <button class="tablinks" id="btnFlow">Flow</button>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                <hr />
-            </div>
 
         </div>
-        <div id="displayDiv" style="overflow:scroll; line-height:1.5em; vertical-align:top; margin-top:0px;width:100%;height:unset"></div>
     </div>
 
     <!-- Component used for displaying notifications -->
