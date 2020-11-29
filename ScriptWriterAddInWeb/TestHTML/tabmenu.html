@@ -1,27 +1,85 @@
 <html>
 
 <head>
-    <script src="tabmenuv.js" type="text/javascript"></script>
-    <link href="tabmenu.css" rel="stylesheet" type="text/css" />
+    <script src="Arc.js" type="text/javascript"></script>
+    <!--    <link href="tabmenu.css" rel="stylesheet" type="text/css" />-->
+    <link href="Arc.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script>
+        document.addEventListener('click', printMousePos, true);
+        document.addEventListener('mouseover', highlightDiv, true);
+
+    </script>
+    <style>
+        .grid-container {
+            display: grid;
+            grid-template-areas: 'main' 'footer';
+            grid-gap: 10px;
+            grid-row-gap: 5px;
+            background-color: #2196F3;
+            padding: 10px;
+        }
+        
+        .item1 {
+            grid-area: main;
+        }
+        
+        .item2 {
+            grid-area: footer;
+            grid-row-start: 2;
+            grid-row-end: 2;
+        }
+
+    </style>
+
 </head>
 
-<body>
+<body style="background-image: url('background.jpg');background-repeat: repeat-x;">
 
-<div class="navbar">
-  <a id="btnHome" href="#">Home</a>
-  <a id="btnWrite" href="#">Write</a>
-  <div class="dropdown">
-    <button id="dropDownAnalyze" class="dropbtn">Analyze 
-      <i class="fa fa-caret-down"></i>
-    </button>
-    <div class="dropdown-content">
-      <a id="btnDialogReport" href="#">Character Voice</a>
-      <a id="btnGroupings" href="#">Character Groupings in Scenes</a>
-      <a id="btnFlow" href="#">Character Flow through Story</a>
+    <div class="grid-container">
+
+        <div class="item1">Top
+            <div id="matrixRight" class="matrixRight">
+                <div id="1r" class="summary">s</div>
+                <div id="2r" class="summary">paragraph 2</div>
+                <div id="3r" class="summary">paragraph 3</div>
+                <div id="4r" class="summary">paragraph 4</div>
+                <div id="5r" class="summary">paragraph 5</div>
+                <div id="6r" class="summary">paragraph 6</div>
+                <div id="7r" class="summary">paragraph 7</div>
+                <div id="8r" class="summary">paragraph 8</div>
+            </div>
+
+        </div>
+
+        <div class="item2">Bottom
+            <div id="matrixLeft" class="matrixLeft">
+                <div id="1 " class="summary ">s</div>
+                <div id="2 " class="summary ">paragraph 2</div>
+                <div id="3 " class="summary ">paragraph 3</div>
+                <div id="4 " class="summary ">paragraph 4</div>
+                <div id="5 " class="summary ">paragraph 5</div>
+                <div id="6 " class="summary ">paragraph 6</div>
+                <div id="7 " class="summary ">paragraph 7</div>
+                <div id="8 " class="summary ">paragraph 8</div>
+            </div>
+        </div>
     </div>
-  </div> 
-      <a id="btnHome" href="#">BlockBuster</a>
-</div>
+
+
+
+
+    <div class="arcResult " id="arcResult ">
+        <div id="a ">1</div>
+        <div id="b ">2</div>
+        <div id="c ">3</div>
+        <div id="d ">4</div>
+        <div id="e ">5</div>
+        <div id="f ">6</div>
+        <div id="g ">7</div>
+        <div id="h ">8</div>
+    </div>
+
 
 </body>
 

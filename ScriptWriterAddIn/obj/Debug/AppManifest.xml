@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
      Name="ScriptWriterAddIn"
-     ProductID="{fddd89ef-d897-4414-9cc9-95e89297fb9f}"
+     ProductID="{2bdc839d-703f-487a-9ee5-7df5c0b41f16}"
      Version="1.0.0.0"
      SharePointMinVersion="15.0.0.0"
 >

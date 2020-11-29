@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--Created:ce44715c-8c4e-446b-879c-ea9ebe0f09c8-->
-<OfficeApp 
-          xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" 
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-          xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" 
+<OfficeApp
+          xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
           xsi:type="TaskPaneApp">
 
@@ -30,7 +30,7 @@
     <AppDomain>AppDomain3</AppDomain>
   </AppDomains>
   <!--End Basic Settings. -->
-  
+
   <!--Begin TaskPane Mode integration. This section is used if there are no VersionOverrides or if the Office client version does not support add-in commands. -->
   <Hosts>
     <Host Name="Document" />
@@ -44,7 +44,7 @@
 
   <!-- Begin Add-in Commands Mode integration. -->
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
-    
+
     <!-- The Hosts node is required. -->
     <Hosts>
       <!-- Each host can have a different set of commands. -->
@@ -56,13 +56,13 @@
           <!--"This code enables a customizable message to be displayed when the add-in is loaded successfully upon individual install."-->
           <GetStarted>
             <!-- Title of the Getting Started callout. The resid attribute points to a ShortString resource -->
-            <Title resid="Contoso.GetStarted.Title"/>
+            <Title resid="WrittenBy.GetStarted.Title"/>
 
             <!-- Description of the Getting Started callout. resid points to a LongString resource -->
-            <Description resid="Contoso.GetStarted.Description"/>
+            <Description resid="WrittenBy.GetStarted.Description"/>
 
             <!-- Points to a URL resource which details how the add-in should be used. -->
-            <LearnMoreUrl resid="Contoso.GetStarted.LearnMoreUrl"/>
+            <LearnMoreUrl resid="WB.GetStarted.LearnMoreUrl"/>
           </GetStarted>
           <!-- Function file is a HTML page that includes the JavaScript where functions for ExecuteAction will be called. 
             Think of the FunctionFile as the code behind ExecuteFunction. -->
@@ -75,7 +75,7 @@
               <!-- Ensure you provide a unique id for the group. Recommendation for any IDs is to namespace using your company name. -->
               <Group id="Contoso.Group1">
                 <!-- Label for your group. resid must point to a ShortString resource. -->
-                <Label resid="Contoso.Group1Label" />
+                <Label resid="WB.Group1Label" />
                 <!-- Icons. Required sizes 16,32,80, optional 20, 24, 40, 48, 64. Strongly recommended to provide all sizes for great UX. -->
                 <!-- Use PNG icons. All URLs on the resources section must use HTTPS. -->
                 <Icon>
@@ -86,12 +86,12 @@
 
                 <!-- Control. It can be of type "Button" or "Menu". -->
                 <Control xsi:type="Button" id="Contoso.TaskpaneButton">
-                  <Label resid="Contoso.TaskpaneButton.Label" />
+                  <Label resid="WB.TaskpaneButton.Label" />
                   <Supertip>
                     <!-- ToolTip title. resid must point to a ShortString resource. -->
-                    <Title resid="Contoso.TaskpaneButton.Label" />
+                    <Title resid="WB.TaskpaneButton.Label" />
                     <!-- ToolTip description. resid must point to a LongString resource. -->
-                    <Description resid="Contoso.TaskpaneButton.Tooltip" />
+                    <Description resid="WB.TaskpaneButton.Tooltip" />
                   </Supertip>
                   <Icon>
                     <bt:Image size="16" resid="Contoso.tpicon_16x16" />
@@ -103,16 +103,55 @@
                   <Action xsi:type="ShowTaskpane">
                     <TaskpaneId>ButtonId1</TaskpaneId>
                     <!-- Provide a URL resource id for the location that will be displayed on the task pane. -->
-                    <SourceLocation resid="Contoso.Taskpane.Url" />
+                    <SourceLocation resid="WB.Taskpane.Url" />
                   </Action>
                 </Control>
               </Group>
             </OfficeTab>
           </ExtensionPoint>
+
+          <ExtensionPoint xsi:type="ContextMenu">
+            <OfficeMenu id="ContextMenuText">
+              <Control xsi:type="Menu" id="WB.TestMenu">
+                <Label resid="WB.ContextMenuLabel" />
+                <Supertip>
+                  <Title resid="WB.ContextualMenuTitle" />
+                  <Description resid="WB.ContextualMenuTitleDesc" />
+                </Supertip>
+                <Icon>
+                  <bt:Image size="16" resid="Contoso.tpicon_16x16"/>
+                  <bt:Image size="32" resid="Contoso.tpicon_16x16"/>
+                  <bt:Image size="64" resid="Contoso.tpicon_16x16"/>
+                  <bt:Image size="80" resid="Contoso.tpicon_16x16"/>
+                </Icon>
+                <!--Add your context sub-menu items-->
+                <Items>
+                  <Item id="EmotionalHistogram">
+                    <Label resid="WB.ItemOneLabel"/>
+                    <Supertip>
+                      <Title resid="WB.ItemOneLabel"/>
+                      <Description resid="WB.ItemOneLabel"/>
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Contoso.tpicon_16x16"/>
+                      <bt:Image size="32" resid="Contoso.tpicon_16x16"/>
+                      <bt:Image size="64" resid="Contoso.tpicon_16x16"/>
+                      <bt:Image size="80" resid="Contoso.tpicon_16x16"/>
+                    </Icon>
+                    <Action xsi:type="ExecuteFunction">
+                      <FunctionName>createHistogram</FunctionName>
+                    </Action>
+                  </Item>
+
+                </Items>
+              </Control>
+            </OfficeMenu>
+          </ExtensionPoint>
+
         </DesktopFormFactor>
       </Host>
     </Hosts>
-    
+
     <!-- You can use resources across hosts and form factors. -->
     <Resources>
       <bt:Images>
@@ -121,20 +160,27 @@
         <bt:Image id="Contoso.tpicon_80x80" DefaultValue="https://localhost:44370/Images/Button80x80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://localhost:44370/Functions/FunctionFile.html" />
-        <bt:Url id="Contoso.Taskpane.Url" DefaultValue="https://localhost:44370/Home.html" />
-        <bt:Url id="Contoso.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
+        <bt:Url id="Contoso.DesktopFunctionFile.Url" DefaultValue="https://localhost:44370/Home.html" />
+        <bt:Url id="WB.DesktopFunctionFile.Url" DefaultValue="https://localhost:44370/Home.html" />
+        <bt:Url id="WB.Taskpane.Url" DefaultValue="https://localhost:44370/Home.html" />
+        <bt:Url id="WB.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
       </bt:Urls>
-      <!-- ShortStrings max characters==125. -->
+      <!--ShortStrings max characters==125.-->
       <bt:ShortStrings>
-        <bt:String id="Contoso.TaskpaneButton.Label" DefaultValue="Show Taskpane" />
-        <bt:String id="Contoso.Group1Label" DefaultValue="Commands Group" />
-        <bt:String id="Contoso.GetStarted.Title" DefaultValue="Get started with your sample add-in!" />
+        <bt:String id="WB.ContextualMenuTitle" DefaultValue="Analysis Tools"  />
+        <bt:String id="WB.ContextMenuLabel" DefaultValue="Analysis Tools"  />
+        <bt:String id="WB.ItemOneLabel" DefaultValue="Emotional Analysis" />
+        <bt:String id="WB.TaskpaneButton.Label" DefaultValue="WrittenBy Tools" />
+        <bt:String id="WB.Group1Label" DefaultValue="Commands Group" />
+        <bt:String id="WrittenBy.GetStarted.Title" DefaultValue="WrittenBy Story Analysis" />
       </bt:ShortStrings>
-      <!-- LongStrings max characters==250. -->
+      <!--LongStrings max characters==250.-->
       <bt:LongStrings>
-        <bt:String id="Contoso.TaskpaneButton.Tooltip" DefaultValue="Click to Show a Taskpane" />
-        <bt:String id="Contoso.GetStarted.Description" DefaultValue="Your sample add-in loaded succesfully. Go to the HOME tab and click the 'Show Taskpane' button to get started." />
+        <bt:String id="WB.ItemOneLabel" DefaultValue="Analysis Tools" />
+        <bt:String id="WB.ContextualMenuTitle" DefaultValue="Analysis Tools" />
+        <bt:String id="WB.ContextualMenuTitleDesc" DefaultValue="Histogram analysis of emotional journey" />
+        <bt:String id="WB.TaskpaneButton.Tooltip" DefaultValue="Click to Show WrittenBy tools" />
+        <bt:String id="WrittenBy.GetStarted.Description" DefaultValue="WrittenBy tools loaded succesfully. Go to the HOME tab and click the 'WrittenBy button to get started." />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>

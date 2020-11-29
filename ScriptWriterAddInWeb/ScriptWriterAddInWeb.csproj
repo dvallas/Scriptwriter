@@ -70,6 +70,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Arc.html" />
+    <Content Include="Content\Arc.css" />
     <Content Include="Content\Button.css" />
     <Content Include="Content\fabric-9.6.0.scoped.css" />
     <Content Include="Content\fabric-9.6.0.scoped.min.css" />
@@ -84,11 +86,13 @@
     <Content Include="Home.html" />
     <Content Include="Home.js" />
     <Content Include="Images\AddinIcon.png" />
+    <Content Include="Images\background.jpg" />
     <Content Include="Images\Button16x16.png" />
     <Content Include="Images\Button32x32.png" />
     <Content Include="Images\Button80x80.png" />
     <Content Include="Images\Close.png" />
     <Content Include="MovieTemplate.txt" />
+    <Content Include="Scripts\Arc.js" />
     <Content Include="Scripts\jquery-3.5.0.js" />
     <Content Include="Scripts\jquery-3.5.0.min.js" />
     <Content Include="Scripts\jquery-3.5.0.slim.js" />
