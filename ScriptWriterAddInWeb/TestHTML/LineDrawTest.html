@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <script>
+        // move to the first point
+        function draw() {
+            var points = [
+                [10, 10],
+                [40, 30],
+                [100, 10],
+                [200, 100],
+                [200, 50],
+                [250, 120]
+            ];
+            let test = points[0][0];
+            var ctx = document.getElementById("c").getContext("2d");
+            ctx.moveTo(points[0][0], points[0][1]);
+
+            ctx.beginPath();
+            for (i = 1; i < points.length - 2; i++) {
+                var xc = (points[i][0] + points[i + 1][0]) / 2;
+                var yc = (points[i][1] + points[i + 1][1]) / 2;
+                ctx.quadraticCurveTo(points[i][0], points[i][1], xc, yc);
+            }
+            // curve through the last two points
+            ctx.quadraticCurveTo(points[i][0], points[i][1], points[i + 1][0], points[i + 1][1]);
+            ctx.stroke();
+
+        }
+
+    </script>
+    <script src="LineDraw.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <button id="buttonCurves" onclick="javascript:draw();">run curve</button>
+    <canvas id="c">
+        <canvas>
+
+</body>
+
+</html>
