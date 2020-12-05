@@ -17,8 +17,8 @@
   <ProviderName>[Provider name]</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
-  <DisplayName DefaultValue="ScriptWriterAddIn" />
-  <Description DefaultValue="ScriptWriterAddIn"/>
+  <DisplayName DefaultValue="WrittenBy" />
+  <Description DefaultValue="WrittenBy add-in for Word"/>
   <!-- Icon for your add-in. Used on installation screens and the add-ins dialog. -->
   <IconUrl DefaultValue="https://localhost:44370/Images/Button32x32.png" />
 
@@ -126,7 +126,7 @@
                 </Icon>
                 <!--Add your context sub-menu items-->
                 <Items>
-                  <Item id="EmotionalHistogram">
+                  <Item id="EmotionalStoryArc">
                     <Label resid="WB.ItemOneLabel"/>
                     <Supertip>
                       <Title resid="WB.ItemOneLabel"/>
@@ -169,16 +169,16 @@
       <bt:ShortStrings>
         <bt:String id="WB.ContextualMenuTitle" DefaultValue="Analysis Tools"  />
         <bt:String id="WB.ContextMenuLabel" DefaultValue="Analysis Tools"  />
-        <bt:String id="WB.ItemOneLabel" DefaultValue="Emotional Analysis" />
+        <bt:String id="WB.ItemOneLabel" DefaultValue="Analysis Tools" />
         <bt:String id="WB.TaskpaneButton.Label" DefaultValue="WrittenBy Tools" />
-        <bt:String id="WB.Group1Label" DefaultValue="Commands Group" />
+        <bt:String id="WB.Group1Label" DefaultValue="Story Tools" />
         <bt:String id="WrittenBy.GetStarted.Title" DefaultValue="WrittenBy Story Analysis" />
       </bt:ShortStrings>
       <!--LongStrings max characters==250.-->
       <bt:LongStrings>
         <bt:String id="WB.ItemOneLabel" DefaultValue="Analysis Tools" />
         <bt:String id="WB.ContextualMenuTitle" DefaultValue="Analysis Tools" />
-        <bt:String id="WB.ContextualMenuTitleDesc" DefaultValue="Histogram analysis of emotional journey" />
+        <bt:String id="WB.ContextualMenuTitleDesc" DefaultValue="Emotional Story Arc analysis" />
         <bt:String id="WB.TaskpaneButton.Tooltip" DefaultValue="Click to Show WrittenBy tools" />
         <bt:String id="WrittenBy.GetStarted.Description" DefaultValue="WrittenBy tools loaded succesfully. Go to the HOME tab and click the 'WrittenBy button to get started." />
       </bt:LongStrings>

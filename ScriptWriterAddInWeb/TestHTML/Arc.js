@@ -1,93 +1,11 @@
-﻿function highlightDiv(e) {
-    //$( "#test" ).html("background-color:grey")
-    $(document).on('mouseover', 'div', function (e) {
-        $("#test").html((e.target).getAttribute('id'));
-
-    });
-}
-
-function printAbsoluteMousePos(e, isMid) {
-    cursorX = e.pageX;
-    cursorY = e.pageY;
-    $("#test").html("");
-    var elem = $('#' + (e.target).getAttribute('id'));
-
-
-    let midpoint = $(window).height() / 2;
-
-    let out = (cursorY <= midpoint ? "Above" : "Below");
-    isMid(out);
-}
-
-function printLine(e) {
-    printAbsoluteMousePos(e, function (isMid) {
-
-        let mid = isMid;
-
-        if (isMid === "Above") {
-            createBar(e, "up");
-        } else {
-            createBar(e, "down")
-        }
-
-    });
-    /*    $("#test").html("pageX: " + cursorX + ", pageY: " + cursorY + "  max chars: " + $("#matrixRight").innerHeight());*/
-}
-
-function createBar(element, direction) {
-
-    var f = element.target.id.substring(0, 1) === "c" ? document.getElementById(element.target.id) : document.getElementById("c" + element.target.id)
-
-    var ctx;
-    try {
-        ctx = f.getContext("2d");
-    } catch {
-        console.log("failed to get context for " + element.target.id);
-        return false;
-    }
-    //var mid = $(window).height() / 2;
-
-
-    let factor = 1 / $(window).height();
-    let mid = 50;
-    let cY = Math.ceil(cursorY * factor * 100);
-    let cX = Math.ceil(cursorX * factor * 100);
-    console.log("mid: " + mid + " canvas height: " + f.height + " canvas width: " + f.width);
-    console.log("Factor: " + factor + " Mid:" + mid + " Y:" + cY + " X:" + cX);
-
-    ctx.beginPath();
-    console.log("Direction: " + direction + " CursorX " + cursorX + " CursorY " + cursorY + " ID " + element.target.id);
-    if (direction === "down") {
-        //x, y, width, height
-        ctx.rect(0, mid, 60, cY - mid);
-    } else {
-        // up
-        //x, y, width, height
-        ctx.rect(0, cY, 60, mid - cY);
-    }
-
-    ctx.stroke();
-    ctx.fillStyle = "red";
-    ctx.fill();
-
-    /*    var ctx = document.getElementById("c4").getContext("2d");
-        ctx.fillStyle = "red";
-        ctx.fill();*/
-}
-
-
-
-
-
-/*
 /******************************************************************************************
  *
  *  EASY CURVE FUNCITON
  *
  *******************************************************************************************/
 
-function drawCurve() {
-    return false;
+function easyCurve() {
+
     var points = [
                 [10, 10],
                 [40, 30],
@@ -109,17 +27,16 @@ function drawCurve() {
     // curve through the last two points
     ctx.quadraticCurveTo(points[i][0], points[i][1], points[i + 1][0], points[i + 1][1]);
     ctx.stroke();
-    ctx.fill();
 
 }
 
-/*
 
-*****************************************************************************************
+
+/*****************************************************************************************
  *
  *  COMPLEX CURVE FUNCITON
  *
- *******************************************************************************************
+ *******************************************************************************************/
 
 function runCurve() {
     var ctx = document.getElementById("cnv").getContext("2d");
@@ -228,4 +145,3 @@ function getCurvePoints(pts, tension, isClosed, numOfSegments) {
     }
     return res;
 }
-*/

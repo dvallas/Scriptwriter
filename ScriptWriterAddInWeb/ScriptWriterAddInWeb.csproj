@@ -70,8 +70,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Arc.html" />
     <Content Include="Content\Arc.css" />
+    <Content Include="Arc.html" />
+    <Content Include="Content\Bars.css" />
+    <Content Include="Scripts\Arc.js" />
     <Content Include="Content\Button.css" />
     <Content Include="Content\fabric-9.6.0.scoped.css" />
     <Content Include="Content\fabric-9.6.0.scoped.min.css" />
@@ -79,6 +81,7 @@
     <Content Include="Content\fabric.min.css" />
     <Content Include="Content\MenuButtonsAndTabs.css" />
     <Content Include="Content\MessageBanner.css" />
+    <Content Include="Content\SlidingMenu.css" />
     <Content Include="Content\tabmenu.css" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
@@ -92,7 +95,7 @@
     <Content Include="Images\Button80x80.png" />
     <Content Include="Images\Close.png" />
     <Content Include="MovieTemplate.txt" />
-    <Content Include="Scripts\Arc.js" />
+    <Content Include="Scripts\Bars.js" />
     <Content Include="Scripts\jquery-3.5.0.js" />
     <Content Include="Scripts\jquery-3.5.0.min.js" />
     <Content Include="Scripts\jquery-3.5.0.slim.js" />
@@ -569,6 +572,7 @@
     <Content Include="Scripts\Office\metadata\endpoints.xml" />
     <Content Include="Scripts\Office\metadata\features.xml" />
     <Content Include="Scripts\Office\MicrosoftAjax.js" />
+    <Content Include="Scripts\Reports.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

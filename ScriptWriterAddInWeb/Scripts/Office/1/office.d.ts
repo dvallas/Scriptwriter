@@ -8302,9 +8302,9 @@ declare namespace Office {
              */
             TocantinsStandardTime = "Tocantins Standard Time",
             /**
-             * Tokyo Standard Time
+             * divSelectName Standard Time
              */
-            TokyoStandardTime = "Tokyo Standard Time",
+            divSelectNameStandardTime = "divSelectName Standard Time",
             /**
              * Tomsk Standard Time
              */

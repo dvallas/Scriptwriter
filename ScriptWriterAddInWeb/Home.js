@@ -3,6 +3,8 @@
 (function () {
     var messageBanner;
     var whichReport;
+    var cursorX, cursorY;
+    var arcGridPoints;
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
         $(document).ready(function () {
@@ -10,18 +12,20 @@
             var element = document.querySelector('.MessageBanner');
             messageBanner = new components.MessageBanner(element);
             messageBanner.hideBanner();
-            document.getElementById("Arc").addEventListener('click', printMousePos, true);
-            document.getElementById("Arc").addEventListener('mouseover', highlightDiv, true);
+            //document.getElementById("Arc").addEventListener('click', printMousePos, true);
+            //document.getElementById("Arc").addEventListener('mouseover', highlightDiv, true);
             // If not using Word 2016, use fallback logic.
+            //Session["context"] = Office.context;
             if (!Office.context.requirements.isSetSupported('WordApi', '1.1')) {
                 $("#template-description").text("This sample displays the selected text.");
                 $('#button-text').text("Display!");
                 $('#button-desc').text("Display the selected text");
                 return;
             }
+            //displayAllBindings();
             //Office.context.document.settings.set("Office.AutoShowTaskpaneWithDocument", true);
-            //Office.context.document.settings.saveAsync();
-            Office.context.document.on
+            Office.context.document.settings.saveAsync();
+            //Office.context.document.on
 
             //loadSampleData();
             //setTemplate();
@@ -61,6 +65,8 @@
             $('#btnFlow').mouseover(btnFlow_mouseover);
             $('#btnFlow').click(btnFlow_click);
             $('#btnArc').click(btnArc_click);
+            $('#btnBars').click(btnBars_click);
+            $('#btnRunBars').click(btnRunBars_click);
 
 
             $('#btnHome').click(btnHome_click);
@@ -77,8 +83,23 @@
         });
     }
 
+    function displayAllBindings() {
+        Office.context.document.bindings.getAllAsync(function (asyncResult) {
+            var bindingString = '';
+            for (var i in asyncResult.value) {
+                bindingString += asyncResult.value[i].id + '\n';
+            }
+            write('Existing bindings: ' + bindingString);
+        });
+    }
+
+    // Function that writes to a div with id='message' on the page.
+    function write(message) {
+        document.getElementById('divTopMessage').innerText += message;
+    }
+
     function selectNameChanged() {
-        ($("#Tokyo").hide());
+        ($("#divSelectName").hide());
         ($("#divTopMessage").html(""));
         ($("#divUserMessage").html(""));
         ($('#Write').hide());
@@ -115,6 +136,7 @@
                     ($("#displayDiv").html(output));
                 }
             });
+
         } else if (whichReport === "dialog") {
             ($("#divTopMessage").html("All Speeches From " + $('#selectName').val().join(" + ")));
             ($("#divUserMessage").html("All of character(s) speeches grouped together"));
@@ -123,6 +145,19 @@
                     ($("#displayDiv").html(dialogList));
                 }
             });
+
+        } else if (whichReport === "bars") {
+            buildBarsPage(function (callback) {
+                if (callback) {
+                    ($("#displayDiv").html(callback));
+                    ($("#displayDiv").show());
+                } else {
+                    ($("#divTopMessage").html("No summaries found to populate report with"));
+                }
+            });
+
+        } else if (whichReport === "arc") {
+
         }
     }
 
@@ -142,7 +177,7 @@
         listCharacterNames(function (nameList) {
             ($('#selectName').html(nameList));
         });
-        ($('#Tokyo').show());
+        ($('#divSelectName').show());
         $('#selectName').focus();
         Word.run(function (context) {
 
@@ -154,7 +189,7 @@
             //context.document.getSelection().text = $('#selectName').val();
             //showNotification("", "Set to 'Slugline'");
             ($('#write').show());
-            ($('#Tokyo').hide());
+            ($('#divSelectName').hide());
 
             return context.sync();
         })
@@ -529,35 +564,18 @@
         ($('#topTabs').show());
     }
 
-    // #endregion
-
-    // #region Tabs
-
     function btnUpToTop_click() {
         ($("#divHeaderMessage").hide());
         ($("#displayDiv").html(""));
         ($('#Analyze').hide());
         ($('#Write').hide());
-        ($('#Tokyo').hide());
+        ($('#divSelectName').hide());
         ($('#TopNav').show());
     }
 
-    function btnArc_click() {
-        //($("#divTopMessage").html("Formatting"));
-        ($("#divUserMessage").html("Emotional Story Arc analysis"));
-        //MenuActiveToggle("btnArc");
-        ($('#Analyze').hide());
-        ($('#Write').hide());
-        // $('#Arc').load("Arc.html");
-        //$('#Arc').html('<object type="type/html" data="home.html" ></object>');
-        //load_home(event);
+    // #endregion
 
-        getSummaries("Act 1", function (summaryList) {
-            ($("#matrix").html(summaryList));
-        });
-        ($("#displayDiv").show());
-    }
-
+    // #region Tabs
     function btnWrite_click() {
         //($("#divTopMessage").html("Formatting"));
         ($("#divUserMessage").html("Manually assign formatting to paragraphs"));
@@ -596,7 +614,7 @@
         listCharacterNames(function (nameList) {
             ($('#selectName').html(nameList));
         });
-        ($('#Tokyo').show());
+        ($('#divSelectName').show());
         $('#selectName').focus();
     }
 
@@ -614,7 +632,7 @@
         listCharacterNames(function (nameList) {
             ($('#selectName').html(nameList));
         });
-        ($('#Tokyo').show());
+        ($('#divSelectName').show());
         $('#selectName').focus();
 
 
@@ -627,7 +645,7 @@
         //    ($('#selectName').html(nameList));
         //});
 
-        //($("#Tokyo").show());
+        //($("#divSelectName").show());
         //($('#selectName').show());
 
 
@@ -638,7 +656,7 @@
         listCharacterNames(function (nameList) {
             ($('#selectName').html(nameList));
         });
-        ($('#Tokyo').show());
+        ($('#divSelectName').show());
         $('#selectName').focus();
     }
 
@@ -648,7 +666,7 @@
         ($("#divTopMessage").text(""));
         ($("#displayDiv").hide());
         ($('#Write').hide());
-        ($('#Tokyo').hide());
+        ($('#divSelectName').hide());
 
         //($("#divTopMessage").text("hello"));
 
@@ -736,7 +754,8 @@
     //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
     function errorHandler(error) {
         // $$(Always be sure to catch any accumulated errors that bubble up from the Word.run execution., $loc_script_taskpane_home_js_comment35$)$$
-        showNotification("Error:", error);
+        // showNotification("Error:", error);
+        $('#divUserMessage').html("Error.  Message: " + error.message);
         console.log("Error: " + error);
         if (error instanceof OfficeExtension.Error) {
             console.log("Debug info: " + JSON.stringify(error.debugInfo));
@@ -802,6 +821,32 @@
     // #endregion
 
     // #region Logic
+    function listActs(callback) {
+        Word.run(async function (context) {
+            var actList = [];
+            var paragraph, charName;
+            var paras = context.document.body.paragraphs;
+            context.load(paras, 'text, style, font');
+            await context.sync()
+
+            for (var i = 0; i < paras.items.length; i++) {
+                paragraph = paras.items[i];
+                //grab the Act, put it in the output
+                if (paragraph.style === "Act Break") {
+                    actList.push(paragraph.text);
+                }
+            }
+            callback(actList);
+        })
+        //.catch(function (error) {
+        //    $('#divUserMessage').html("Error in listActs(): " + error.message);
+        //    //showNotification('Error: ' + error.content.join(", "));
+        //    //showNotification('Error: ' + JSON.stringify(error));
+        //    if (error instanceof OfficeExtension.Error) {
+        //        console.log('Debug info: ' + JSON.stringify(error.debugInfo));
+        //    }
+        //});
+    }
 
     function listCharacterNames(callback) {
         Word.run(function (context) {
@@ -1001,10 +1046,11 @@
         })
     }
 
-    function getSummaries(act, callback) {
+    function getSummaries(acts, callback) {
         Word.run(function (context) {
             var paras = context.document.body.paragraphs;
             var paragraph;
+            let includeThisAct = false;
             var charSummaries = [];
             context.load(paras, 'text, style');
             return context.sync()
@@ -1013,15 +1059,26 @@
                         paragraph = paras.items[i];
                         //grab the Act, put it in the output
                         if (paragraph.style === "Act Break") {
-                            charSummaries.push("<br /><b>" + paragraph.text + "</b><br />");
+                            if (acts.includes(paragraph.text)) {
+                                includeThisAct = true;
+                                charSummaries.push("<br /><b>" + paragraph.text + "</b><br />");
+                            }
+                            else {
+                                includeThisAct = false;
+                            }
+                            
                         }
                         // grab selected scene summary
-                        if (paragraph.style === "Summary") {
+                        if (paragraph.style === "Summary" && includeThisAct) {
                             charSummaries.push(paragraph.text.substring(0, 100));
                         }
                     }
+
+                    //filter to remove unselected Acts
+
                     callback(charSummaries);
-                    context.sync();
+                    //return charSummaries;
+                    //context.sync();
                 })
                 .catch(function (error) {
                     //showNotification('Error: ' + error.content.join(", "));
@@ -1036,5 +1093,395 @@
     }
 
     // #endregion
+
+    // #region Bars Report
+
+    function btnBars_click() {
+        //($("#divTopMessage").html("Formatting"));
+        ($("#divUserMessage").html("Emotional Story Arc analysis"));
+        whichReport = "bars";
+
+        buildActList(function (callback) {
+            ($('#tableActSelector').html(callback));
+            ($('#ActPicker').show());
+            $('#ActPicker').focus();
+        });
+
+    }
+
+    function btnRunBars_click(event) {
+        ($('#ActPicker').hide());
+        var acts = [];
+        var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
+
+        for (let i = 0; i < checkboxes.length; i++) {
+            acts.push(checkboxes[i].value)
+        }
+        buildBarsPage(acts, "");
+
+         ($('#displayDiv').show());
+   }
+
+    function buildBarsPage(acts,thisCallback) {
+        var callback;
+        getSummaries(acts, function (callback) {
+            let s = callback;
+            let outputDiv = ("<div class='grid-container' id='container'><div id='matrixTopDiv' class='item1'>");
+            let outputCanvas = ("<div id='matrixTopCanvas' class='item2'>");
+
+            if (s) {
+                arcGridPoints = new Array(s.length);
+                for (let i = 0; i < s.length; i++) {
+                    outputDiv += ("<div id='" + i + "' class='summTop'>" + s[i].substring(0, 50) + " ");
+                    outputDiv += ("<span class='tooltip'>" + s.value + s[i] + " </span> </div>");
+                    outputCanvas += ("<canvas class='barTop' width=100 height=100 id='c" + i + "'></canvas>");
+                }
+            }
+            //close outputDiv
+            outputDiv += ("</div>");
+            //close outputCanvas
+            outputCanvas += ("</div></div>");
+            let out = outputDiv + outputCanvas;
+
+            //fix this with a callback
+            ($("#displayDiv").html(out));
+            document.getElementById("container").addEventListener('click', printLine, true);
+            //thisCallback(out);
+        });
+    }
+
+    async function buildActList(callback) {
+        var call;
+        listActs(function (call) {
+
+            let out = "";
+            if (call) {
+                for (let i = 0; i < call.length; i++) {
+                    out += ("<tr><td width='100px'><input type='checkbox' id='act" + i + "' value='" + call[i] + "'>" + call[i] + "</ input></td></tr>");
+                }
+                out += "</table>";
+                ($('#tableActSelector').add(out));
+            }
+            callback(out);
+        })
+    }
+
+    function btnBars_onmouseover() {
+
+    }
+
+    // #endregion
+
+    // #region Bars
+
+    // Get the document mode and the URL of the active project.
+    function showDocumentProperties() {
+        var output = String.format(
+            'The document mode is {0}.<br/>The URL of the active project is {1}.',
+            Office.context.document.mode,
+            Office.context.document.url);
+        $('#divTopMessage').html(output);
+    }
+
+    function highlightDiv(e) {
+        //$( "#test" ).html("background-color:grey")
+        $(document).on('mouseover', 'div', function (e) {
+            $("#test").html((e.target).getAttribute('id'));
+
+        });
+    }
+
+    function printAbsoluteMousePos(e, isMid) {
+        cursorX = e.pageX;
+        cursorY = e.pageY;
+
+        //var elem = $('#' + (e.target.id).getAttribute('id'));
+        arcGridPoints[e.target.id.substring(1)] = [cursorX, cursorY];
+
+        let midpoint = $(window).height() / 2;
+
+        let out = (e.pageY <= midpoint ? "Above" : "Below");
+        isMid(out);
+    }
+
+    function printLine(e) {
+        printAbsoluteMousePos(e, function (isMid) {
+            if (isMid === "Above") {
+                createBar(e, "up");
+            } else {
+                createBar(e, "down")
+            }
+        });
+    }
+
+    function createBar(element, direction) {
+
+        var f = element.target.id.substring(0, 1) === "c" ? document.getElementById(element.target.id) : document.getElementById("c" + element.target.id);
+
+        var ctx;
+        try {
+            ctx = f.getContext("2d");
+        } catch (error) {
+            console.log("failed to get context for " + element.target.id);
+            return false;
+        }
+        //var mid = $(window).height() / 2;
+
+
+        let factor = 1 / $(window).height();
+        let mid = 50;
+        let cY = Math.ceil(cursorY * factor * 100);
+        let cX = Math.ceil(cursorX * factor * 100);
+        console.log("mid: " + mid + " canvas height: " + f.height + " canvas width: " + f.width);
+        console.log("Factor: " + factor + " Mid:" + mid + " Y:" + cY + " X:" + cX);
+
+        ctx.beginPath();
+        console.log("Direction: " + direction + " CursorX " + cursorX + " CursorY " + cursorY + " ID " + element.target.id);
+        if (direction === "down") {
+            //x, y, width, height
+            ctx.rect(0, mid, 60, cY - mid);
+        } else {
+            // up
+            //x, y, width, height
+            ctx.rect(0, cY, 60, mid - cY);
+        }
+
+        ctx.stroke();
+        ctx.fillStyle = "red";
+        ctx.fill();
+
+        /*    var ctx = document.getElementById("c4").getContext("2d");
+            ctx.fillStyle = "red";
+            ctx.fill();*/
+    }
+
+    // #endregion
+    function resizeCanvasToDisplaySize(canvas) {
+        // look up the size the canvas is being displayed
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+
+        // If it's resolution does not match change it
+        if (canvas.width !== width || canvas.height !== height) {
+            canvas.width = width;
+            canvas.height = height;
+            return true;
+        }
+
+        return false;
+    }
+    // #region Arc Report
+    function btnArc_click() {
+        var canvas = document.createElement('canvas');
+        resizeCanvasToDisplaySize(canvas);
+        canvas.id = 'cnv';
+        canvas.width = 600;
+        canvas.height = 400;
+        canvas.strokeStyle = "#FF0000"; //red
+        canvas.lineWidth = 6;
+        canvas.style.zIndex = 5;
+        canvas.style.opacity=".6"
+        canvas.style.position = "absolute";
+        //canvas.style.width = "100%";
+        //canvas.style.height = "100%";
+        canvas.style.top = "0px";
+        canvas.style.left = "0px";
+
+        document.getElementById('displayDiv').appendChild(canvas);
+        //canvas.style.left = (this.window.width / 2) - 50;
+        //canvas.style.top = (this.window.height / 2) - 50;
+        //var a = padArcGridPoints();
+        //runCurve();
+        //easyCurve(a);
+
+        //fix this with map
+        //const newMatrix = arcGridPoints.map(typeof (x) == 'undefined' ? [50, 50] : x);
+        //for (let i = 0; i < arcGridPoints.length; i++) {
+        //    if (typeof (arcGridPoints[i]) == 'undefined') {
+        //        arcGridPoints[i] = [50, 50];
+        //    }
+        //}
+        //easyCurve();
+        var x;
+        var newMatrix = [], Matrix = [];
+        for (x in arcGridPoints)
+            newMatrix.push(arcGridPoints[x][1]);
+        //Matrix = arcGridPoints.map(typeof (x) == 'undefined' ? [50] : x);
+        //($("#displayDiv").hide());
+        //($("#cnv").show());
+        var entry;
+        var arrayClean = arcGridPoints.filter((entry) => { return entry != 'undefined' });
+        easyCurve(arrayClean);
+        //runCurve(newMatrix);
+    }
+
+    function easyCurve(arcGridPoints) {
+        var i;
+        var points = [
+            [10, 10],
+            [40, 30],
+            [100, 10],
+            [200, 100],
+            [200, 50],
+            [250, 120]
+        ];
+        try {
+            var ctx = document.getElementById("cnv").getContext("2d");
+            ctx.moveTo(arcGridPoints[0][0], arcGridPoints[0][1]);
+
+            ctx.beginPath();
+            for (i = 1; i < arcGridPoints.length - 2; i++) {
+                var xc = (arcGridPoints[i][0] + arcGridPoints[i + 1][0]) / 2;
+                var yc = (arcGridPoints[i][1] + arcGridPoints[i + 1][1]) / 2;
+                ctx.quadraticCurveTo(arcGridPoints[i][0], arcGridPoints[i][1], xc, yc);
+            }
+            // curve through the last two points
+            ctx.quadraticCurveTo(arcGridPoints[i][0], arcGridPoints[i][1], arcGridPoints[i + 1][0], arcGridPoints[i + 1][1]);
+            ctx.stroke();
+        }
+        catch (error) {
+            ($("#divTopMessage").html("Blew up in easycurve: " + error.message));
+        }
+    }
+
+    function runCurve(GridPoints) {
+        try {
+            var ctx = document.getElementById("cnv").getContext("2d");
+
+        } catch (error) {
+            ($("#divTopMessage").html("Failed to get context for cnv: " + error.message + " Line: " + Error.prototype.lineNumber));
+            return false;
+        }
+        //GridPoints = [169, 119, 112, 10, 40, 30, 100]; //minimum two points
+        //GridPoints = [10, 10, 40, 30, 100, 10, 200, 100, 200, 50, 250, 120]; //minimum two points
+        var tension = 1;
+
+        try {
+            if (GridPoints) {
+
+                if (CanvasRenderingContext2D != 'undefined') {
+                    CanvasRenderingContext2D.prototype.drawCurve =
+                        function (GridPoints, tension, isClosed, numOfSegments, showPoints) {
+                            drawCurve(this, GridPoints, tension, isClosed, numOfSegments, showPoints)
+                        }
+                }
+
+                drawCurve(ctx, GridPoints); //default tension=0.5
+                drawCurve(ctx, GridPoints, tension);
+                //($("#divTopMessage").html(($("#divTopMessage").html() + "<br />Draw complete.")));
+            } else {
+                ($("#divTopMessage").html("No points plotted yet, or no saved points found."));
+            }
+        }
+        catch (error) {
+            ($("#divTopMessage").html(($("#divTopMessage").html() + "<br />Blew up drawing the curve: " + error.message)));
+            return false;
+        }
+    }
+
+    function drawLines(ctx, pts) {
+        ctx.moveTo(pts[0], pts[1]);
+        for (let i = 2; i < pts.length - 1; i += 2) ctx.lineTo(pts[i], pts[i + 1]);
+    }
+
+    function drawCurve(ctx, ptsa, tension, isClosed, numOfSegments, showPoints) {
+        if (!ctx)
+            ($("#divTopMessage").html(($("#divTopMessage").html() + ("<br />Inside drawCurve: " + error.message + " Points passed: " + ptsa ? "true " + ptsa.length : "false"))));
+
+        ctx.beginPath();
+
+        drawLines(ctx, getCurvePoints(ptsa, tension, isClosed, numOfSegments));
+
+        if (showPoints) {
+            ctx.beginPath();
+            for (var i = 0; i < ptsa.length - 1; i += 2)
+                ctx.rect(ptsa[i] - 2, ptsa[i + 1] - 2, 4, 4);
+        }
+
+        ctx.stroke();
+        //($("#divTopMessage").html(($("#divTopMessage").html() + "<br />Stroke complete.")));
+   }
+
+    function getCurvePoints(pts, tension, isClosed, numOfSegments) {
+
+        // use input value if provided, or use a default value	 
+        tension = (typeof tension != 'undefined') ? tension : 0.5;
+        isClosed = isClosed ? isClosed : false;
+        numOfSegments = numOfSegments ? numOfSegments : 16;
+
+        var _pts = [],
+            res = [], // clone array
+            x, y, // our x,y coords
+            t1x, t2x, t1y, t2y, // tension vectors
+            c1, c2, c3, c4, // cardinal points
+            st, t, i; // steps based on num. of segments
+
+        // clone array so we don't change the original
+        //
+        _pts = pts; //.slice(0);
+
+        // The algorithm require a previous and next point to the actual point array.
+        // Check if we will draw closed or open curve.
+        // If closed, copy end points to beginning and first points to end
+        // If open, duplicate first points to befinning, end points to end
+        try {
+            if (isClosed) {
+                _pts.unshift(pts[pts.length - 1]);
+                _pts.unshift(pts[pts.length - 2]);
+                _pts.unshift(pts[pts.length - 1]);
+                _pts.unshift(pts[pts.length - 2]);
+                _pts.push(pts[0]);
+                _pts.push(pts[1]);
+            } else {
+                _pts.unshift(pts[1]); //copy 1. point and insert at beginning
+                _pts.unshift(pts[0]);
+                _pts.push(pts[pts.length - 2]); //copy last point and append
+                _pts.push(pts[pts.length - 1]);
+            }
+        }
+        catch (error) {
+            ($("#divTopMessage").html(($("#divTopMessage").html() + "Inside getCurvePoints: " + error.message + ", Points passed: " + pts ? "true, " + pts.length : "false")));
+            return false;
+        }
+
+        // ok, lets start..
+
+        // 1. loop goes through point array
+        // 2. loop goes through each segment between the 2 pts + 1e point before and after
+        for (i = 2; i < (_pts.length - 4); i += 2) {
+            for (t = 0; t <= numOfSegments; t++) {
+
+                // calc tension vectors
+                t1x = (_pts[i + 2] - _pts[i - 2]) * tension;
+                t2x = (_pts[i + 4] - _pts[i]) * tension;
+
+                t1y = (_pts[i + 3] - _pts[i - 1]) * tension;
+                t2y = (_pts[i + 5] - _pts[i + 1]) * tension;
+
+                // calc step
+                st = t / numOfSegments;
+
+                // calc cardinals
+                c1 = 2 * Math.pow(st, 3) - 3 * Math.pow(st, 2) + 1;
+                c2 = -(2 * Math.pow(st, 3)) + 3 * Math.pow(st, 2);
+                c3 = Math.pow(st, 3) - 2 * Math.pow(st, 2) + st;
+                c4 = Math.pow(st, 3) - Math.pow(st, 2);
+
+                // calc x and y cords with common control vectors
+                x = c1 * _pts[i] + c2 * _pts[i + 2] + c3 * t1x + c4 * t2x;
+                y = c1 * _pts[i + 1] + c2 * _pts[i + 3] + c3 * t1y + c4 * t2y;
+
+                //store points in array
+                res.push(x);
+                res.push(y);
+
+            }
+        }
+        return res;
+    }
+
+
+    // #endregion
+
 
 })();

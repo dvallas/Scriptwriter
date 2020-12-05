@@ -7962,7 +7962,7 @@ OSF.InitializationHelper.prototype.loadAppSpecificScriptAndCreateOM = function O
         TaipeiStandardTime: "Taipei Standard Time",
         TasmaniaStandardTime: "Tasmania Standard Time",
         TocantinsStandardTime: "Tocantins Standard Time",
-        TokyoStandardTime: "Tokyo Standard Time",
+        divSelectNameStandardTime: "divSelectName Standard Time",
         TomskStandardTime: "Tomsk Standard Time",
         TongaStandardTime: "Tonga Standard Time",
         TransbaikalStandardTime: "Transbaikal Standard Time",
