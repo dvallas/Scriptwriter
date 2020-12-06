@@ -4,10 +4,12 @@ body {
     width: 100%;*/
 }
 .grid-container {
-    width: 100%;
-    height: 100%;
-    grid-template-rows: 100%;
-    grid-template-columns: 100%;
+    margin-top:10px;
+    pargin-left:5px;
+    width: 95%;
+    height: 95%;
+    grid-template-rows: 95%;
+    grid-template-columns: 95%;
     display: grid;
     /*    grid-template-rows: fit-content: 100%;*/
     grid-template-areas: 'main' 'footer';
@@ -50,11 +52,11 @@ body {
 /*    writing-mode: vertical-lr;*/
 }
 .barTop {
-    opacity: 0.3;
+    opacity: 1;
     height: 100%;
     width: 4vh;
-    color: black;
-    pointer-events: auto;
+/*    color: black;
+*/    pointer-events: auto;
     z-index: 4;
  /*   writing-mode: vertical-lr;*/
 }
@@ -67,23 +69,25 @@ body {
 
 .tooltip {
     position: relative;
-    display: inline-block;
+    display: block;
     border-bottom: 1px dotted black;
 }
 
     .tooltip .tooltiptext {
-        visibility: hidden;
-        width: 120px;
-        background-color: black;
-        color: #fff;
-        text-align: center;
+        display: none;
+        width: 600px;
+        background-color:antiquewhite;
+        color: black;
+        opacity: .8;
+        text-align: left;
         border-radius: 6px;
         padding: 5px 0;
         /* Position the tooltip */
-        position: absolute;
+        position: fixed;
         z-index: 10;
-        top: -5px;
-        right: 105%;
+        top: 75%;
+        left: 20px;
+        writing-mode:initial;
     }
 
     .tooltip:hover .tooltiptext {

@@ -143,6 +143,7 @@
             getCharacterDialog($('#selectName').val(), function (dialogList) {
                 if (dialogList) {
                     ($("#displayDiv").html(dialogList));
+                    ($("#displayDiv").show());
                 }
             });
 
@@ -1061,12 +1062,11 @@
                         if (paragraph.style === "Act Break") {
                             if (acts.includes(paragraph.text)) {
                                 includeThisAct = true;
-                                charSummaries.push("<br /><b>" + paragraph.text + "</b><br />");
+                                charSummaries.push(paragraph.text);
                             }
                             else {
                                 includeThisAct = false;
                             }
-                            
                         }
                         // grab selected scene summary
                         if (paragraph.style === "Summary" && includeThisAct) {
@@ -1088,9 +1088,9 @@
                         console.log('Debug info: ' + JSON.stringify(error.debugInfo));
                     }
                 });
-        })
-
+        });
     }
+
 
     // #endregion
 
@@ -1124,30 +1124,52 @@
 
     function buildBarsPage(acts,thisCallback) {
         var callback;
-        getSummaries(acts, function (callback) {
-            let s = callback;
-            let outputDiv = ("<div class='grid-container' id='container'><div id='matrixTopDiv' class='item1'>");
-            let outputCanvas = ("<div id='matrixTopCanvas' class='item2'>");
+        ($("#displayDiv").html(""));
+        try {
+            getSummaries(acts, function (callback) {
+                let s = callback;
+                let outputDiv = ("<div class='grid-container' id='container'><div id='matrixTopDiv' class='item1'>");
+                let outputCanvas = ("<div id='matrixTopCanvas' class='item2'>");
 
-            if (s) {
-                arcGridPoints = new Array(s.length);
-                for (let i = 0; i < s.length; i++) {
-                    outputDiv += ("<div id='" + i + "' class='summTop'>" + s[i].substring(0, 50) + " ");
-                    outputDiv += ("<span class='tooltip'>" + s.value + s[i] + " </span> </div>");
-                    outputCanvas += ("<canvas class='barTop' width=100 height=100 id='c" + i + "'></canvas>");
+                if (s) {
+                    arcGridPoints = new Array(s.length);
+                    for (let i = 0; i < s.length; i++) {
+                        outputDiv += ("<div id='" + i + "' class='summTop tooltip'>" + s[i].substring(0, 70) + " ");
+                        outputDiv += ("<span class='tooltiptext' id='tip" + i + "'>" + s[i] + "</span> </div>");
+                        outputCanvas += ("<canvas class='barTop' width=100 height=100 id='c" + i + "'></canvas>");
+                    }
                 }
-            }
-            //close outputDiv
-            outputDiv += ("</div>");
-            //close outputCanvas
-            outputCanvas += ("</div></div>");
-            let out = outputDiv + outputCanvas;
+                outputDiv += ("</div>");
+                outputCanvas += ("</div></div>");
+                let out = outputDiv + outputCanvas;
 
-            //fix this with a callback
-            ($("#displayDiv").html(out));
-            document.getElementById("container").addEventListener('click', printLine, true);
-            //thisCallback(out);
-        });
+                //fix this with a callback
+                ($("#displayDiv").html(out));
+                try {
+                    document.getElementById("container").addEventListener('click', printLine, true);
+                    document.getElementById("container").addEventListener('mouseover', toggleToolTipOn, true);
+                    document.getElementById("container").addEventListener('mouseout', toggleToolTipOff, true);
+                } catch (error) {
+                    ($("#divTopMessage").html("Failed in adding listeners. :" + error.message));
+                }
+
+                //thisCallback(out);
+            });
+        }
+        catch (error) {
+            ($("#divTopMessage").html("Failed in building Bars page.  :" + error.message));
+        }
+    }
+
+        //document.getElementById(e.target.id).style.visibility = "visible";
+    function toggleToolTipOn(e) {
+        var a = "tip" + e.target.id.substring(1);
+        ($('#' + a).show());
+    }
+
+    function toggleToolTipOff(e) {
+        var a = "tip" + e.target.id.substring(1);
+        ($('#' + a).hide());
     }
 
     async function buildActList(callback) {
@@ -1168,19 +1190,6 @@
 
     function btnBars_onmouseover() {
 
-    }
-
-    // #endregion
-
-    // #region Bars
-
-    // Get the document mode and the URL of the active project.
-    function showDocumentProperties() {
-        var output = String.format(
-            'The document mode is {0}.<br/>The URL of the active project is {1}.',
-            Office.context.document.mode,
-            Office.context.document.url);
-        $('#divTopMessage').html(output);
     }
 
     function highlightDiv(e) {
@@ -1217,16 +1226,14 @@
     function createBar(element, direction) {
 
         var f = element.target.id.substring(0, 1) === "c" ? document.getElementById(element.target.id) : document.getElementById("c" + element.target.id);
-
         var ctx;
+
         try {
             ctx = f.getContext("2d");
         } catch (error) {
             console.log("failed to get context for " + element.target.id);
             return false;
         }
-        //var mid = $(window).height() / 2;
-
 
         let factor = 1 / $(window).height();
         let mid = 50;
@@ -1235,27 +1242,26 @@
         console.log("mid: " + mid + " canvas height: " + f.height + " canvas width: " + f.width);
         console.log("Factor: " + factor + " Mid:" + mid + " Y:" + cY + " X:" + cX);
 
+        //  rect params: x, y, width, height
         ctx.beginPath();
+        ctx.clearRect(0, 0, f.width, f.height);
         console.log("Direction: " + direction + " CursorX " + cursorX + " CursorY " + cursorY + " ID " + element.target.id);
         if (direction === "down") {
-            //x, y, width, height
+            ctx.fillStyle = "#FF0000"; //red
             ctx.rect(0, mid, 60, cY - mid);
         } else {
             // up
-            //x, y, width, height
+            ctx.fillStyle = "#0000FF"; //blue
             ctx.rect(0, cY, 60, mid - cY);
         }
 
         ctx.stroke();
-        ctx.fillStyle = "red";
         ctx.fill();
 
-        /*    var ctx = document.getElementById("c4").getContext("2d");
-            ctx.fillStyle = "red";
-            ctx.fill();*/
     }
 
     // #endregion
+
     function resizeCanvasToDisplaySize(canvas) {
         // look up the size the canvas is being displayed
         const width = canvas.clientWidth;
@@ -1270,6 +1276,7 @@
 
         return false;
     }
+
     // #region Arc Report
     function btnArc_click() {
         var canvas = document.createElement('canvas');
@@ -1337,6 +1344,8 @@
             }
             // curve through the last two points
             ctx.quadraticCurveTo(arcGridPoints[i][0], arcGridPoints[i][1], arcGridPoints[i + 1][0], arcGridPoints[i + 1][1]);
+            ctx.strokeStyle = "#FF0000"
+            ctx.lineWidth = 4;
             ctx.stroke();
         }
         catch (error) {
