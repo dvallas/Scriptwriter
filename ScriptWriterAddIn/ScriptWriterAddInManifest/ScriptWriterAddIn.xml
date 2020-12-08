@@ -45,6 +45,8 @@
   <!-- Begin Add-in Commands Mode integration. -->
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
 
+    
+    
     <!-- The Hosts node is required. -->
     <Hosts>
       <!-- Each host can have a different set of commands. -->
@@ -108,9 +110,58 @@
                 </Control>
               </Group>
             </OfficeTab>
+
+            <!-- Use OfficeTab to extend an existing Tab. Use CustomTab to create a new tab. -->
+            <OfficeTab id="TabHome">
+              <!-- Ensure you provide a unique id for the group. Recommendation for any IDs is to namespace using your company name. -->
+              <Group id="WB.Group1">
+                <!-- Label for your group. resid must point to a ShortString resource. -->
+                <Label resid="WB.Group1Label" />
+                <!-- Icons. Required sizes 16,32,80, optional 20, 24, 40, 48, 64. Strongly recommended to provide all sizes for great UX. -->
+                <!-- Use PNG icons. All URLs on the resources section must use HTTPS. -->
+                <Icon>
+                  <bt:Image size="16" resid="Contoso.tpicon_16x16" />
+                  <bt:Image size="32" resid="Contoso.tpicon_32x32" />
+                  <bt:Image size="80" resid="Contoso.tpicon_80x80" />
+                </Icon>
+
+                <!-- Control. It can be of type "Button" or "Menu". -->
+                <Control xsi:type="Button" id="WB.SceneNumbering">
+                  <Label resid="WB.SceneNumberingButton.Label" />
+                  <Supertip>
+                    <!-- ToolTip title. resid must point to a ShortString resource. -->
+                    <Title resid="WB.SceneNumberingButton.Label" />
+                    <!-- ToolTip description. resid must point to a LongString resource. -->
+                    <Description resid="WB.SceneNumberingButton.Tooltip" />
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Contoso.tpicon_16x16" />
+                    <bt:Image size="32" resid="Contoso.tpicon_32x32" />
+                    <bt:Image size="80" resid="Contoso.tpicon_80x80" />
+                  </Icon>
+
+                  <!-- This is what happens when the command is triggered (E.g. click on the Ribbon). Supported actions are ExecuteFunction or ShowTaskpane. -->
+                  <Action xsi:type="ExecuteFunction">
+                    <FunctionName>SceneNumberingButton</FunctionName>
+                    <!-- Provide a URL resource id for the location that will be displayed on the task pane. -->
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
           </ExtensionPoint>
 
-          <ExtensionPoint xsi:type="ContextMenu">
+
+
+
+
+
+
+
+
+
+
+
+            <ExtensionPoint xsi:type="ContextMenu">
             <OfficeMenu id="ContextMenuText">
               <Control xsi:type="Menu" id="WB.TestMenu">
                 <Label resid="WB.ContextMenuLabel" />
@@ -165,12 +216,16 @@
         <bt:Url id="WB.Taskpane.Url" DefaultValue="~remoteAppUrl/Home.html" />
         <bt:Url id="WB.GetStarted.LearnMoreUrl" DefaultValue="https://go.microsoft.com/fwlink/?LinkId=276812" />
       </bt:Urls>
+
+
+
       <!--ShortStrings max characters==125.-->
       <bt:ShortStrings>
         <bt:String id="WB.ContextualMenuTitle" DefaultValue="Analysis Tools"  />
         <bt:String id="WB.ContextMenuLabel" DefaultValue="Analysis Tools"  />
         <bt:String id="WB.ItemOneLabel" DefaultValue="Analysis Tools" />
         <bt:String id="WB.TaskpaneButton.Label" DefaultValue="WrittenBy Tools" />
+        <bt:String id="WB.SceneNumberingButton.Label" DefaultValue="Scene Numbering" />
         <bt:String id="WB.Group1Label" DefaultValue="Story Tools" />
         <bt:String id="WrittenBy.GetStarted.Title" DefaultValue="WrittenBy Story Analysis" />
       </bt:ShortStrings>
@@ -181,6 +236,7 @@
         <bt:String id="WB.ContextualMenuTitleDesc" DefaultValue="Emotional Story Arc analysis" />
         <bt:String id="WB.TaskpaneButton.Tooltip" DefaultValue="Click to Show WrittenBy tools" />
         <bt:String id="WrittenBy.GetStarted.Description" DefaultValue="WrittenBy tools loaded succesfully. Go to the HOME tab and click the 'WrittenBy button to get started." />
+        <bt:String id="WB.SceneNumberingButton.Tooltip" DefaultValue="Toggle Scene Numbering On/Off" />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>

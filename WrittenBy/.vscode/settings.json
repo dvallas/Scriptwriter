@@ -1,0 +1,13 @@
+{
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript"
+    ],
+    "git.ignoreLimitWarning": true,
+    "workbench.colorTheme": "Community Material Theme",
+    "workbench.preferredLightColorTheme": "Visual Studio Light",
+    "window.autoDetectColorScheme": true,
+    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python37_64\\python.exe"
+  }
+  

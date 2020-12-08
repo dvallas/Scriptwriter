@@ -1,0 +1,95 @@
+html,
+body {
+    /*    height: 100%;
+    width: 100%;*/
+}
+.grid-container {
+    margin-top:10px;
+    pargin-left:5px;
+    width: 95%;
+    height: 95%;
+    grid-template-rows: 95%;
+    grid-template-columns: 95%;
+    display: grid;
+    /*    grid-template-rows: fit-content: 100%;*/
+    grid-template-areas: 'main' 'footer';
+    grid-gap: 0px;
+    grid-row-gap: 0px;
+    padding: 0px;
+    z-index: 1;
+    /*    margin: 0;*/
+/*    overflow-y: hidden;
+    overflow-x: hidden;*/
+}
+
+/*----------------------------------------------------------------------------*/
+
+.item1 {
+    grid-area: main;
+    grid-row-start: 1;
+    grid-row-end: 1;
+   /*opacity: 0.7;*/
+    z-index: 1;
+    pointer-events: none;
+    writing-mode: vertical-lr;
+}
+.summTop {
+    height: 100%;
+    width: 4vh;
+    z-index: 1;
+}
+
+/*----------------------------------------------------------------------------*/
+
+.item2 {
+    grid-area: footer;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    opacity: 0.3;
+    color: black;
+    pointer-events: none;
+    z-index: 2;
+/*    writing-mode: vertical-lr;*/
+}
+.barTop {
+    opacity: 1;
+    height: 100%;
+    width: 4vh;
+/*    color: black;
+*/    pointer-events: auto;
+    z-index: 4;
+ /*   writing-mode: vertical-lr;*/
+}
+
+
+/*-------------------------------------------------------------------------------------------------------------------------*/
+/*              TOOL TIP */
+/*-------------------------------------------------------------------------------------------------------------------------*/
+
+
+.tooltip {
+    position: relative;
+    display: block;
+    border-bottom: 1px dotted black;
+}
+
+    .tooltip .tooltiptext {
+        display: none;
+        width: 600px;
+        background-color:antiquewhite;
+        color: black;
+        opacity: .8;
+        text-align: left;
+        border-radius: 6px;
+        padding: 5px 0;
+        /* Position the tooltip */
+        position: fixed;
+        z-index: 10;
+        top: 75%;
+        left: 20px;
+        writing-mode:initial;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }

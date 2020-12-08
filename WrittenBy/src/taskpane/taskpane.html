@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title>WrittenBy</title>
+
+    <!--<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- To enable offline debugging using a local reference to Office.js, use:  -->
+    <!-- <script src="Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>  -->
+    <script src="../../Scripts/Office/1/office.js" type="text/javascript"></script>
+    <script src="../../Scripts/jquery-3.5.0.js" type="text/javascript"></script>
+    <script src="../../Scripts/MessageBanner.js" type="text/javascript"></script>
+    <!--<script src="Scripts/Arc.js" type="text/javascript"></script>-->
+    <script src="../../taskpane.js" type="text/javascript"></script>
+    <!--<script src="Scripts/Bars.js" type="text/javascript"></script>-->
+
+    <link href="../../taskpane.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Button.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/MenuButtonsAndTabs.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/MessageBanner.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/tabmenu.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Arc.css" rel="stylesheet" type="text/css" />
+    <link href="../../Content/Bars.css" rel="stylesheet" type="text/css" />
+    <!--<link href="../Content/TopNav.css" rel="stylesheet" type="text/css" />-->
+    <!-- For Office UI Fabric Core, go to https://aka.ms/office-ui-fabric to learn more. -->
+    <link rel="stylesheet" href="https://static2.sharepointonline.com/files/fabric/office-ui-fabric-core/9.6.0/css/fabric.min.css">
+    <!-- To enable the offline use of Office UI Fabric Core, use: -->
+    <!-- link rel="stylesheet" href="Content/fabric.min.css" -->
+
+</head>
+
+
+<body class="ms-Fabric" dir="ltr" style="height:100%;">
+
+    <div id="content-main">
+        <div class="header">
+            <div class="navbar">
+                <div class="dropdown">
+                    <button id="btnHamburger" class="dropbtn">
+                        &#9776;
+                    </button>
+
+                    <div id="dropDownMenuBurger" class="dropdown-content">
+                        <a id="btnAbandon" href="#">Abandon and Return</a>
+                        <a id="btnSave" href="#">Save This Report</a>
+                        <a id="btnRecall" href="#">Recall Earlier Report</a>
+                        <a id="btnPrint" href="Arc.html">Print</a>
+                    </div>
+                </div>
+                <a id="btnWrite" href="#">Write</a>
+                <div class="dropdown">
+                    <button id="dropDownAnalyze" class="dropbtn">
+                        Analyze
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div id="dropDownMenuAnalysis" class="dropdown-content">
+                        <a id="btnDialogReport" href="#">Character Voice</a>
+                        <a id="btnGroupings" href="#">Character Groupings in Scenes</a>
+                        <a id="btnFlow" href="#">Character Flow through Story</a>
+                        <a id="btnBars" href="#">Assign Emotional Values</a>
+                        <a id="btnArc" href="#">Create/Analyze Arc</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button id="dropDownAnalyze" class="dropbtn">
+                        A.I.
+                        <i class="fa fa-caret-down"></i>
+                    </button>
+                    <div id="dropDownMenuAI" class="dropdown-content">
+                        <a id="btnDialogReport" href="#">Natural Language Dialog Analysis</a>
+                        <a id="btnGroupings" href="#">Story Elements vs Paradigms</a>
+                        <a id="btnFlow" href="#">Genre analysis</a>
+                        <a id="btnBars" href="#">Appropriate Age Range Analysis</a>
+                    </div>
+                </div>
+                <a id="btnHome" style="float:right;margin-right:20px;" href="#">Help</a>
+            </div>
+
+            <div id="divTopMessage"></div>
+
+            <div id="divSelectName" class="tabcontent" style="vertical-align:middle; text-align:center;">
+                <table style="width:100%; border:none">
+                    <tr>
+                        <td>
+                            <select multiple size=12 id="selectName"></select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button id="btnRunReport">Run Report</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="ActPicker" class="tabcontent" style="vertical-align:middle; text-align:center;">
+
+                <table id="tableActSelector">
+                </table>
+                <table>
+                    <tbody>
+                        <tr colspan="2">
+                            <td align="center"><a id="btnRunBars" href="#">Select and Go</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="Write" class="tabcontent" style="display:none">
+                <p class="ms-font-m-plus ms-fontColor-neutralTertiary" id="template-description">
+
+                    <table style="width: 100%">
+                        <tr>
+                            <td> <button id="btnSlugline" class="button button1">Slugline</button></td>
+                            <td><button id="btnAction" class="button button1">Action</button></td>
+                        </tr>
+                        <tr>
+                            <td><button id="btnName" class="button button1">Name</button></td>
+                            <td><button id="btnDirection" class="button button1">Direction</button></td>
+                        </tr>
+                        <tr>
+                            <td><button id="btnDialog" class="button button1">Dialog</button></td>
+                            <td><button id="btnCutTo" class="button button1">Cut To:</button></td>
+                        </tr>
+                        <tr>
+                            <td><button id="btnDissolveTo" class="button button1">Dissolve To:</button></td>
+                            <td><button id="btn2nd Slug" class="button button1">2nd Slug</button></td>
+                        </tr>
+                        <tr>
+                            <td><button id="btnNotes" class="button button1">Notes</button></td>
+                            <td><button id="btnParaphrase" class="button button1">Paraphrase</button></td>
+                        </tr>
+                        <tr>
+                            <td><button id="btnScene" class="button button1">Scene Summary</button></td>
+                            <td><button id="btnNoteToDo" class="button button1">Note/ToDo</button></td>
+                        </tr>
+                    </table>
+                </p>
+            </div>
+
+            <div id="displayDiv" 
+                 style="position:relative;
+top:0;
+left:0;
+overflow:scroll; 
+width:100%;
+height:100%; 
+
+line-height:1.5em; 
+z-index:2; height:86vh ">
+            </div>
+
+            <div class="padding">
+
+
+            </div>
+        </div>
+
+
+        <div class="MessageBanner" id="notification-popup">
+            <div class="MessageBanner-content">
+                <div class="MessageBanner-text">
+                    <div class="MessageBanner-clipper">
+                        <div class="ms-font-m ms-fontWeight-semilight" id="notification-body"></div>
+                        <div class="ms-font-m-plus ms-fontWeight-semibold" id="notification-header"></div>
+                    </div>
+                </div>
+                <button class="MessageBanner-expand" style="display: none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+                <div class="MessageBanner-action"></div>
+            </div>
+            <button class="MessageBanner-close"> <i class="ms-Icon ms-Icon--ChromeClose"></i> </button>
+        </div>
+
+        <div class="footer" style="position:absolute;position:fixed;margin-bottom:0px;width:100%">
+            <div class="ms-u-sm12 ms-u-md12 ms-u-lg12" style="background-color:dodgerblue">
+                <div id="divUserMessage" class="ms-font-s ms-fontColor-white">Written By</div>
+            </div>
+        </div>
+
+</body>
+</html>

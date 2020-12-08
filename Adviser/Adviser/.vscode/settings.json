@@ -5,8 +5,9 @@
       "typescript"
     ],
     "git.ignoreLimitWarning": true,
-    "workbench.colorTheme": "Visual Studio Light",
+    "workbench.colorTheme": "Visual Studio 2019 Light",
     "workbench.preferredLightColorTheme": "Visual Studio Light",
-    "window.autoDetectColorScheme": true
+    "window.autoDetectColorScheme": true,
+    "python.pythonPath": "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\Python37_64\\python.exe"
   }
   
