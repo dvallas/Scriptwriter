@@ -1,4 +1,6 @@
-﻿"use strict";
+﻿/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+"use strict";
 
 (function () {
     var messageBanner;
@@ -583,7 +585,7 @@
         MenuActiveToggle("btnWrite");
         ($("#displayDiv").html(""));
         ($('#Analyze').hide());
-        ($('#Write').hide());
+        ($('#Write').show());
         $('#Arc').load("Arc.html");
     }
 
@@ -822,6 +824,7 @@
     // #endregion
 
     // #region Logic
+    
     function listActs(callback) {
         Word.run(async function (context) {
             var actList = [];
@@ -1100,7 +1103,7 @@
         //($("#divTopMessage").html("Formatting"));
         ($("#divUserMessage").html("Emotional Story Arc analysis"));
         whichReport = "bars";
-
+        ($('#ActPicker').hide());
         buildActList(function (callback) {
             ($('#tableActSelector').html(callback));
             ($('#ActPicker').show());
@@ -1110,10 +1113,8 @@
     }
 
     function btnRunBars_click(event) {
-        ($('#ActPicker').hide());
         var acts = [];
         var checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
-
         for (let i = 0; i < checkboxes.length; i++) {
             acts.push(checkboxes[i].value)
         }
@@ -1136,7 +1137,7 @@
                     for (let i = 0; i < s.length; i++) {
                         outputDiv += ("<div id='" + i + "' class='summTop tooltip'>" + s[i].substring(0, 70) + " ");
                         outputDiv += ("<span class='tooltiptext' id='tip" + i + "'>" + s[i] + "</span> </div>");
-                        outputCanvas += ("<canvas class='barTop' width=100 height=100 id='c" + i + "'></canvas>");
+                        outputCanvas += ("<canvas class='barTop' id='c" + i + "'></canvas>");
                     }
                 }
                 outputDiv += ("</div>");
@@ -1149,6 +1150,8 @@
                     document.getElementById("container").addEventListener('click', printLine, true);
                     document.getElementById("container").addEventListener('mouseover', toggleToolTipOn, true);
                     document.getElementById("container").addEventListener('mouseout', toggleToolTipOff, true);
+                    fitToContainer( document.querySelectorAll('canvas'));
+
                 } catch (error) {
                     ($("#divTopMessage").html("Failed in adding listeners. :" + error.message));
                 }
@@ -1157,11 +1160,86 @@
             });
         }
         catch (error) {
+
             ($("#divTopMessage").html("Failed in building Bars page.  :" + error.message));
         }
     }
+ 
+    function createBar(element, direction) {
 
-        //document.getElementById(e.target.id).style.visibility = "visible";
+        if (!element){
+            console.log("no element passed to function");
+            return false;
+        }
+        if (element.target.id==="container") return true;
+        var ctx;
+
+        try {
+            var f = element.target.id.substring(0, 1) === "c" ? document.getElementById(element.target.id) : document.getElementById("c" + element.target.id);
+            ctx = f.getContext("2d");
+        } catch (error) {
+            console.log("failed to get context for " + f.id);
+            return false;
+        }
+
+        let factor = 1 /document.getElementById("matrixTopDiv").offsetHeight;
+        let mid = document.getElementById("matrixTopDiv").offsetHeight/2;
+        // let cY = Math.ceil(cursorY * factor * 100);
+        // let cX = Math.ceil(cursorX * factor * 100);
+        let cY = Math.ceil(cursorY );
+
+
+        //console.log("mid: " + mid + " canvas height: " + document.getElementById("matrixTopDiv").scrollHeight +   " canvas width: " + document.getElementById("matrixTopDiv").scrollWidth);
+        //console.log("Factor: " + factor + " Mid:" + mid + " Y:" + cY + " X:" + cX);
+
+direction=(cY>mid?"down":"up");
+
+        //  rect params: x, y, width, height
+        ctx.beginPath();
+        ctx.clearRect(0, 0, f.width, f.height);
+        let strUp="Direction: UP "  +"from upper left: " + cY + " to Height: " + mid-cY + " ID " + element.target.id;
+        let strDown="Direction: DOWN from" + mid +  "  to Height " + cY + " ID " + element.target.id;
+        console.log(direction === "down" ? strDown : strUp);
+        if (direction === "down") {
+            ctx.fillStyle = "#FF0000"; //red
+            ctx.rect(0, mid, 60, cY-mid); 
+        } else {
+            // up
+            ctx.fillStyle = "#0000FF"; //blue
+            ctx.rect(0, cY, 60, mid-cY);
+        }
+
+        ctx.stroke();
+        ctx.fill();
+
+    }
+
+    function fitToContainer(canvas){
+        for (let i=0;i<canvas.length;i++){
+
+                // Make it visually fill the positioned parent
+                //canvas[i].style.width ='100%';
+                //canvas[i].style.height='100%';
+                // ...then set the internal size to match
+                //canvas[i].width  = document.getElementById("container").offsetWidth;
+                canvas[i].width  = 100;
+                canvas[i].height = document.getElementById("matrixTopDiv").offsetHeight;
+              }
+      }
+
+      function resizeCanvasToDisplaySize(canvas) {
+        // look up the size the canvas is being displayed
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+
+        // If it's resolution does not match change it
+  canvas.style.width='100%';
+  canvas.style.height='100%';
+  canvas.width  = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+            
+    }
+
     function toggleToolTipOn(e) {
         var a = "tip" + e.target.id.substring(1);
         ($('#' + a).show());
@@ -1223,83 +1301,29 @@
         });
     }
 
-    function createBar(element, direction) {
-
-        var f = element.target.id.substring(0, 1) === "c" ? document.getElementById(element.target.id) : document.getElementById("c" + element.target.id);
-        var ctx;
-
-        try {
-            ctx = f.getContext("2d");
-        } catch (error) {
-            console.log("failed to get context for " + element.target.id);
-            return false;
-        }
-
-        let factor = 1 / $(window).height();
-        let mid = 50;
-        let cY = Math.ceil(cursorY * factor * 100);
-        let cX = Math.ceil(cursorX * factor * 100);
-        console.log("mid: " + mid + " canvas height: " + f.height + " canvas width: " + f.width);
-        console.log("Factor: " + factor + " Mid:" + mid + " Y:" + cY + " X:" + cX);
-
-        //  rect params: x, y, width, height
-        ctx.beginPath();
-        ctx.clearRect(0, 0, f.width, f.height);
-        console.log("Direction: " + direction + " CursorX " + cursorX + " CursorY " + cursorY + " ID " + element.target.id);
-        if (direction === "down") {
-            ctx.fillStyle = "#FF0000"; //red
-            ctx.rect(0, mid, 60, cY - mid);
-        } else {
-            // up
-            ctx.fillStyle = "#0000FF"; //blue
-            ctx.rect(0, cY, 60, mid - cY);
-        }
-
-        ctx.stroke();
-        ctx.fill();
-
-    }
-
     // #endregion
-
-    function resizeCanvasToDisplaySize(canvas) {
-        // look up the size the canvas is being displayed
-        const width = canvas.clientWidth;
-        const height = canvas.clientHeight;
-
-        // If it's resolution does not match change it
-        if (canvas.width !== width || canvas.height !== height) {
-            canvas.width = width;
-            canvas.height = height;
-            return true;
-        }
-
-        return false;
-    }
 
     // #region Arc Report
     function btnArc_click() {
         var canvas = document.createElement('canvas');
-        resizeCanvasToDisplaySize(canvas);
+        //resizeCanvasToDisplaySize(canvas);
         canvas.id = 'cnv';
-        canvas.width = 600;
-        canvas.height = 400;
+        canvas.style.width='100%';
+        canvas.style.height='100%';
+        var ctx=canvas.getContext("2d");
+        ctx.width  = canvas.offsetWidth;
+        ctx.height = canvas.offsetHeight;
         canvas.strokeStyle = "#FF0000"; //red
         canvas.lineWidth = 6;
         canvas.style.zIndex = 5;
         canvas.style.opacity=".6"
         canvas.style.position = "absolute";
-        //canvas.style.width = "100%";
-        //canvas.style.height = "100%";
+
         canvas.style.top = "0px";
         canvas.style.left = "0px";
 
         document.getElementById('displayDiv').appendChild(canvas);
-        //canvas.style.left = (this.window.width / 2) - 50;
-        //canvas.style.top = (this.window.height / 2) - 50;
-        //var a = padArcGridPoints();
-        //runCurve();
-        //easyCurve(a);
+
 
         //fix this with map
         //const newMatrix = arcGridPoints.map(typeof (x) == 'undefined' ? [50, 50] : x);
